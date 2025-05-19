@@ -5,12 +5,18 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 
 public class PlaneController {
-    public static Response createPlane(String id, String brand, String model, String maxCapacity, String airline){
+    public static Response createPlane(String id, String brand, String model, int maxCapacity, String airline){
         try {
-            if(id.equals("")){
-                return new Response("Id must be not empty", Status.BAD_REQUEST);
-            }
-            if(){
+            
+            String maxCapacityS = String.valueOf(maxCapacity);
+            try {
+                if(!isValidPlaneIdFormat(id)){
+                    return new Response("Format is invalid", Status.BAD_REQUEST);
+                }
+            } catch (Exception e) {
+                if(id.equals("")){
+                    return new Response("Id must be not empty", Status.BAD_REQUEST);
+                }
             }
             
             if(brand.equals("")){
@@ -21,14 +27,13 @@ public class PlaneController {
                 return new Response("Model must be not empty", Status.BAD_REQUEST);
             }
             
-            int maxCapacityInt;
             try {
-                maxCapacityInt = Integer.parseInt(maxCapacity);
-                if(maxCapacityInt < 0){
+                
+                if(maxCapacity < 0){
                     return new Response("Max capacity must be positive", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException e) {
-                if(maxCapacity.equals("")){
+                if(maxCapacityS.equals("")){
                 return new Response("Max Capacity must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Max capacity must be just numeric", Status.BAD_REQUEST);
@@ -40,5 +45,10 @@ public class PlaneController {
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.BAD_REQUEST);
         }
+        
     }
+    
+    private static boolean isValidPlaneIdFormat(String id) {
+        return id.matches("^[A-Z]{2}\\d{5}$");
+}
 }

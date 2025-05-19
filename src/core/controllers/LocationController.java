@@ -17,14 +17,14 @@ public class LocationController {
                return true;
     }
     
-    public static Response createLocation(String id, String name, String city, String country, String latitude, String longitude){
+    public static Response createLocation(String id, String name, String city, String country, double latitude, double longitude){
         try {
-            double latitudeD;
-            double longitudeD;
+            String latitudeS = String.valueOf(latitude);
+            String longitudeS = String.valueOf(longitude);
             
             try {
                 if(!isValidAirportId(id)) {
-                    return new Response("ID must be 3 uppercase letters ", Status.BAD_REQUEST);
+                    return new Response("ID must be 3 capital letters ", Status.BAD_REQUEST);
                 }
             } catch (Exception e) {
                 if(id.equals("")){
@@ -43,30 +43,30 @@ public class LocationController {
                 return new Response("Country must be not empty", Status.BAD_REQUEST);
             }
             try {
-                latitudeD = Double.parseDouble(latitude);
-                if (!latitude.matches("-?\\d+(\\.\\d{1,4})?")) {
+                
+                if (!latitudeS.matches("-?\\d+(\\.\\d{1,4})?")) {
                     return new Response("Latitude must have max 4 decimals", Status.BAD_REQUEST);
                 }
-                if(latitudeD < -90 && latitudeD > 90){
+                if(latitude < -90 && latitude > 90){
                     return new Response("Latitude is in incorrect range", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException e) {
-                if(latitude.equals("")){
+                if(latitudeS.equals("")){
                     return new Response("Latitude must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Latitude must be numeric", Status.BAD_REQUEST);
             }
             
             try {
-                longitudeD = Double.parseDouble(longitude);
-                if (!longitude.matches("-?\\d+(\\.\\d{1,4})?")) {
+                
+                if (!longitudeS.matches("-?\\d+(\\.\\d{1,4})?")) {
                     return new Response("Longitude must have max 4 decimals", Status.BAD_REQUEST);
                 }
-                if(longitudeD < -180 && longitudeD > 180){
+                if(longitude < -180 && longitude > 180){
                     return new Response("Longitude is in incorrect range", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException e) {
-                if(longitude.equals("")){
+                if(longitudeS.equals("")){
                     return new Response("Longitude must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Longitude must be numeric", Status.BAD_REQUEST);
@@ -75,5 +75,6 @@ public class LocationController {
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
+        return null;
     }
 }
