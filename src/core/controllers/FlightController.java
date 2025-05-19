@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
  */
 public class FlightController {
 
-    // Vuelo directo
     public static Response createFlight(String id, String planeId,
             String departureLocationId, String arrivalLocationId,
             String scaleLocationId, String departureYear, String departureMonth,
