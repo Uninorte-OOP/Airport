@@ -2,17 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  *
- * @author edangulo
+ * @author Kevin
  */
 public class Flight {
-    
     private final String id;
     private ArrayList<Passenger> passengers;
     private Plane plane;
@@ -114,5 +113,4 @@ public class Flight {
     public int getNumPassengers() {
         return passengers.size();
     }
-    
 }
