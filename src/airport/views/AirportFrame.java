@@ -2,8 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package airport;
+package airport.views;
 
+import airport.models.Flight;
+import airport.models.Location;
+import airport.models.Passenger;
+import airport.models.Plane;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -97,8 +101,8 @@ public class AirportFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelRound1 = new airport.PanelRound();
-        panelRound2 = new airport.PanelRound();
+        panelRound1 = new airport.models.PanelRound();
+        panelRound2 = new airport.models.PanelRound();
         ClosePageButton = new javax.swing.JButton();
         PrincipalPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -235,7 +239,7 @@ public class AirportFrame extends javax.swing.JFrame {
         DelayFlight_MinutesLabel = new javax.swing.JLabel();
         DelayFlight_ChooseMinute = new javax.swing.JComboBox<>();
         DelayFlight_DelayButton = new javax.swing.JButton();
-        panelRound3 = new airport.PanelRound();
+        panelRound3 = new airport.models.PanelRound();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -1673,21 +1677,7 @@ public class AirportFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        System.setProperty("flatlaf.useNativeLibrary", "false");
 
-        try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
-        }
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AirportFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddToFlight_AddButton;
@@ -1826,8 +1816,8 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private airport.PanelRound panelRound1;
-    private airport.PanelRound panelRound2;
-    private airport.PanelRound panelRound3;
+    private airport.models.PanelRound panelRound1;
+    private airport.models.PanelRound panelRound2;
+    private airport.models.PanelRound panelRound3;
     // End of variables declaration//GEN-END:variables
 }
