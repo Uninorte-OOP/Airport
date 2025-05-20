@@ -90,4 +90,14 @@ public class Storage {
         }
         return null;
     }
+    
+    public boolean addPassenger(Passenger passenger) {
+        for (Passenger p : this.passengers) {
+            if (p.getId() == passenger.getId()) {
+                return false;
+            }
+        }
+        passengers.add(passenger);
+        return true;
+    }
 }
