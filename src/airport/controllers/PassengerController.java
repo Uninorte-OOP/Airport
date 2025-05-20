@@ -34,27 +34,27 @@ public class PassengerController {
         String country
     ) {
         try {
-            // Validación básica de campos obligatorios
-            if (firstName.isEmpty() || lastName.isEmpty() || country.isEmpty()) {
+            // 1. Validación de campos obligatorios
+            if (firstName == null || firstName.trim().isEmpty() ||
+                lastName == null || lastName.trim().isEmpty() ||
+                country == null || country.trim().isEmpty()) {
                 return new Response("Nombre, apellido y país son obligatorios", Status.BAD_REQUEST);
             }
-
-            // Validación y conversión de ID
+            
+            // 2. Validación y conversión de ID
             long id;
             try {
                 id = Long.parseLong(idText);
                 if (id <= 0) {
                     return new Response("ID debe ser un número positivo", Status.BAD_REQUEST);
                 }
-                
-                // Verificación de duplicados (MOVIDA AL CONTROLLER)
-                if (passengerStorage.getPassengerById(id) != null) {
-                    return new Response("El ID de pasajero ya existe", Status.BAD_REQUEST);
-                }
             } catch (NumberFormatException e) {
                 return new Response("ID debe ser un número válido", Status.BAD_REQUEST);
             }
-
+            // Validación de unicidad de ID
+            if (passengerStorage.getPassengerById(id) != null) {
+                return new Response("El ID de pasajero ya existe", Status.BAD_REQUEST);
+            }
             // Validación de fecha de nacimiento
             LocalDate birthDate;
             try {
