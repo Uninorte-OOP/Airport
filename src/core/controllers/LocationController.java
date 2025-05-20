@@ -21,15 +21,12 @@ public class LocationController {
         try {
             String latitudeS = String.valueOf(latitude);
             String longitudeS = String.valueOf(longitude);
-
-            try {
-                if (!isValidAirportId(id)) {
-                    return new Response("Id must be 3 capital letters ", Status.BAD_REQUEST);
-                }
-            } catch (Exception e) {
-                if (id.equals("")) {
-                    return new Response("Id must be not empty", Status.BAD_REQUEST);
-                }
+            
+            if (id.equals("")) {
+                return new Response("Id must be not empty", Status.BAD_REQUEST);
+            }
+            if (!isValidAirportId(id)) {
+                return new Response("Id must be 3 capital letters ", Status.BAD_REQUEST);
             }
 
             if (name.equals("")) {
