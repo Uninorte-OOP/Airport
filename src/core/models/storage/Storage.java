@@ -139,4 +139,14 @@ public class Storage {
         planes.add(plane);
         return true;
     }
+    
+    public boolean addLocation(Location location) {
+        for (Location l : locations) {
+            if (l.getId() == location.getId()) {
+                return false;
+            }
+        }
+        locations.add(location);
+        return true;
+    }
 }

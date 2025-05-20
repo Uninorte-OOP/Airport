@@ -49,5 +49,7 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
-    
+    public String getId() {
+        return airportId;
+    }
 }
