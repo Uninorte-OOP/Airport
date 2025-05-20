@@ -262,4 +262,51 @@ public class FlightController {
             return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    public static Response delayFlight(String flightId, String hours, String minutes) {
+        try {
+            int flightIdInt;
+            int hoursInt;
+            int minutesInt;
+            
+            // Válidar flightId
+            if (flightId == null || flightId.trim().isEmpty()) {
+                return new Response("Flight id must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                flightIdInt = Integer.parseInt(flightId.trim());
+            } catch (NumberFormatException ex) {
+                return new Response("Flight id must be a number.", Status.BAD_REQUEST);
+            }
+            
+            // Válidar hours
+            if (hours == null || hours.trim().isEmpty()) {
+                return new Response("Hours must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                hoursInt = Integer.parseInt(hours.trim());
+            } catch (Exception ex) {
+                return new Response("Hours must be a number.", Status.BAD_REQUEST);
+            }
+            
+            // Válidar minutes
+            if (minutes == null || minutes.trim().isEmpty()) {
+                return new Response("Minutes must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                minutesInt = Integer.parseInt(minutes.trim());
+            } catch (Exception ex) {
+                return new Response("Minutes must be a number.", Status.BAD_REQUEST);
+            }
+            
+            if (hoursInt <= 0 && minutesInt <= 0) {
+                return new Response("Delay time must be a longest that 00:00.", Status.BAD_REQUEST);
+            }
+            
+            Storage.getInstance().getFlight(flightId).delay(hoursInt, minutesInt);
+            return new Response("Delay apply succesfully.", Status.OK);
+        } catch (Exception ex) {
+            return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
