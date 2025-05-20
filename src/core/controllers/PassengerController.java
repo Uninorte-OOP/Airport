@@ -6,9 +6,11 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.Flight;
 import core.models.Passenger;
 import core.models.storage.Storage;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  *
@@ -326,6 +328,36 @@ public class PassengerController {
 
             return new Response("Passenger updated succesfully.", Status.OK);
 
+        } catch (Exception ex) {
+            return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public static Response showMyFlights(String passengerId) {
+        try {
+            long passengerIdLong;
+            if (passengerId == null || passengerId.trim().isEmpty()) {
+                return new Response("Passenger id must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                passengerIdLong = Long.parseLong(passengerId.trim());
+                if (passengerIdLong <= 0) {
+                    return new Response("Passenger id must be positive.", Status.BAD_REQUEST);
+                }
+            } catch (NumberFormatException ex) {
+                return new Response("Passenger id must be a number.", Status.BAD_REQUEST);
+            }
+            if (passengerId.trim().length() > 15) {
+                return new Response("Passenger id must have a maximum of 15 digits.", Status.BAD_REQUEST);
+            }
+            if (Storage.getInstance().getPassenger(passengerId) == null) {
+                return new Response("Passenger id not exist.", Status.BAD_REQUEST);
+            }
+            
+            ArrayList<Flight> flights = Storage.getInstance().getPassengerFlights(Storage.getInstance().getPassenger(passengerId));
+            
+            return new Response("Flights loaded succesfully.", Status.OK, flights);
+            
         } catch (Exception ex) {
             return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
         }

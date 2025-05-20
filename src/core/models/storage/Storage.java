@@ -120,4 +120,13 @@ public class Storage {
         updatePassenger.setCountry(passenger.getCountry());
         return true;
     }
+    
+    public ArrayList<Flight> getPassengerFlights(Passenger passenger) {
+        for (Passenger p : passengers) {
+            if (p.getId() == passenger.getId()) {
+                return passenger.getFlights();
+            }
+        }
+        return new ArrayList<>();
+    }
 }
