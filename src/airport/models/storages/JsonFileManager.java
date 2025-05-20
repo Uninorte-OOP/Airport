@@ -3,19 +3,25 @@ package airport.models.storages;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class JsonFileManager {
-    private static final String DATA_DIR = "data/";
-
+    // Usamos Paths.get() para construir rutas multiplataforma
+    private static final Path JSON_DIR = Paths.get(System.getProperty("user.dir"), "json");
+    
     public static JSONArray readJsonArray(String filename) throws Exception {
-        String filePath = DATA_DIR + filename;
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+        Path filePath = JSON_DIR.resolve(filename);
+        if (!Files.exists(filePath)) {
+            throw new RuntimeException("Archivo no encontrado: " + filePath.toAbsolutePath());
+        }
+        String content = Files.readString(filePath);
         return new JSONArray(content);
     }
-
+    
     public static void writeJsonArray(String filename, JSONArray jsonArray) throws Exception {
-        String filePath = DATA_DIR + filename;
-        Files.write(Paths.get(filePath), jsonArray.toString().getBytes());
+        Path filePath = JSON_DIR.resolve(filename);
+        Files.createDirectories(filePath.getParent());
+        Files.writeString(filePath, jsonArray.toString());
     }
 }

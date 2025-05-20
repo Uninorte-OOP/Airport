@@ -85,4 +85,16 @@ public class FlightStorage {
     public List<Flight> getAllFlights() {
         return new ArrayList<>(flights);
     }
+
+    public boolean addFlight(Flight newFlight) {
+        try {
+            flights.add(newFlight);
+            System.out.println("Vuelo añadido (sin persistencia JSON aún): " + newFlight.getId());
+            return true;
+            
+        } catch (Exception e) {
+            System.err.println("Error al añadir vuelo: " + e.getMessage());
+            return false;
+        }
+    }
 }

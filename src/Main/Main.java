@@ -5,8 +5,6 @@
 package Main;
 
 import airport.views.AirportFrame;
-import com.formdev.flatlaf.FlatDarkLaf;
-import javax.swing.UIManager;
 
 /**
  *
@@ -17,9 +15,9 @@ public class Main {
         System.setProperty("flatlaf.useNativeLibrary", "false");
 
         try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
+            //UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
+            //System.err.println("Failed to initialize LaF");
         }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

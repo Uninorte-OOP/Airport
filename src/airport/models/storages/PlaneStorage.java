@@ -51,4 +51,22 @@ public class PlaneStorage {
     public List<Plane> getAllPlanes() {
         return new ArrayList<>(planes);
     }
+
+    public boolean addPlane(Plane newPlane) {
+        try {
+            // Verificación adicional
+            if (planes.stream().anyMatch(p -> p.getId().equals(newPlane.getId()))) {
+                System.err.println("Error: ID de avión duplicado detectado en Storage");
+                return false;
+            }
+            
+            planes.add(newPlane);
+            System.out.println("Avión añadido (sin persistencia JSON aún): " + newPlane.getId());
+            return true;
+            
+        } catch (Exception e) {
+            System.err.println("Error al añadir avión: " + e.getMessage());
+            return false;
+        }
+    }
 }
