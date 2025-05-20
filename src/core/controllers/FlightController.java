@@ -23,8 +23,6 @@ public class FlightController {
             String arrivalHour, String arrivalMinutes, String scaleHour,
             String scaleMinutes) {
         try {
-            Storage storage = Storage.getInstance();
-
             int departureYearInt;
             int departureMonthInt;
             int departureDayInt;
@@ -47,7 +45,7 @@ public class FlightController {
                 return new Response("Id must be a valid format: XXXYYY (e.g: ABC123).", Status.BAD_REQUEST);
             }
 
-            if (storage.getFlight(id) != null) {
+            if (Storage.getInstance().getFlight(id) != null) {
                 return new Response("Id must be unique.", Status.BAD_REQUEST);
             }
 
@@ -192,7 +190,7 @@ public class FlightController {
                         scaleHourInt,
                         scaleMinutesInt
                 );
-                if (!storage.addFlight(flight)) {
+                if (!Storage.getInstance().addFlight(flight)) {
                     return new Response("A flight with that id already exist.", Status.BAD_REQUEST);
                 }
                 return new Response("Flight created succesfully.", Status.CREATED);
@@ -217,11 +215,51 @@ public class FlightController {
             return new Response("Flight created succesfully.", Status.CREATED);
 
         } catch (Exception ex) {
-            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
+            return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public static Response addFlight() {
-        return new Response("", Status.NOT_IMPLEMENTED);
+    public static Response addFlight(String passengerId, String flightId) {
+        try {
+            long passengerIdLong;
+            int flightIdInt;
+            
+            // Válidar passengerId
+            if (passengerId == null || passengerId.trim().isEmpty()) {
+                return new Response("Passenger id must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                passengerIdLong = Long.parseLong(passengerId.trim());
+                if (passengerIdLong <= 0) {
+                    return new Response("Passenger id must be positive.", Status.BAD_REQUEST);
+                }
+            } catch (NumberFormatException ex) {
+                return new Response("Passenger id must be a number.", Status.BAD_REQUEST);
+            }
+            if (passengerId.trim().length() > 15) {
+                return new Response("Passenger id must have a maximum of 15 digits.", Status.BAD_REQUEST);
+            }
+            if (Storage.getInstance().getPassenger(passengerId) != null) {
+                return new Response("Passenger id must be unique.", Status.BAD_REQUEST);
+            }
+            
+            // Válidar flightId
+            if (flightId == null || flightId.trim().isEmpty()) {
+                return new Response("Flight id must be not empty.", Status.BAD_REQUEST);
+            }
+            try {
+                flightIdInt = Integer.parseInt(flightId.trim());
+            } catch (NumberFormatException ex) {
+                return new Response("Flight id must be a number.", Status.BAD_REQUEST);
+            }
+            
+            Storage.getInstance().getPassenger(passengerId).addFlight(Storage.getInstance().getFlight(flightId));
+            Storage.getInstance().getFlight(flightId).addPassenger(Storage.getInstance().getPassenger(passengerId));
+            
+            return new Response("Passenger added succesfully to the flight.", Status.OK);
+            
+        } catch (Exception ex) {
+            return new Response("Unexpected error.", Status.INTERNAL_SERVER_ERROR);
+        }
     }
 }

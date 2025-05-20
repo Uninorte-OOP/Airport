@@ -6,6 +6,7 @@ package core.models.storage;
 
 import core.models.Flight;
 import core.models.Location;
+import core.models.Passenger;
 import core.models.Plane;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class Storage {
     private ArrayList<Flight> flights;
     private ArrayList<Location> locations;
     private ArrayList<Plane> planes;
+    private ArrayList<Passenger> passengers;
     
     private Storage() {
         this.flights = new ArrayList<>();
@@ -74,6 +76,16 @@ public class Storage {
         for (Plane plane : this.planes) {
             if (plane.getId() == id) {
                 return plane;
+            }
+        }
+        return null;
+    }
+    
+    public Passenger getPassenger(String id)  throws NumberFormatException {
+        long idLong = Long.parseLong(id);
+        for (Passenger passenger : this.passengers) {
+            if (passenger.getId() == idLong) {
+                return passenger;
             }
         }
         return null;
