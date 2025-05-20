@@ -465,6 +465,11 @@ public class AirportFrame extends javax.swing.JFrame {
         jLabel16.setText("Airport ID:");
 
         jTextField13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextField13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField13ActionPerformed(evt);
+            }
+        });
 
         jLabel17.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel17.setText("Airport name:");
@@ -1691,6 +1696,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void MONTH1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MONTH1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_MONTH1ActionPerformed
+
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField13ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> DAY;

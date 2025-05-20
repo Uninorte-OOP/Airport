@@ -129,4 +129,24 @@ public class Storage {
         }
         return new ArrayList<>();
     }
+    
+    public boolean addPlane(Plane plane) {
+        for (Plane p : planes) {
+            if (p.getId() == plane.getId()) {
+                return false;
+            }
+        }
+        planes.add(plane);
+        return true;
+    }
+    
+    public boolean addLocation(Location location) {
+        for (Location l : locations) {
+            if (l.getId() == location.getId()) {
+                return false;
+            }
+        }
+        locations.add(location);
+        return true;
+    }
 }
