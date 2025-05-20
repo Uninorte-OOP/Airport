@@ -4,9 +4,6 @@
  */
 package airport.controller;
 
-import airport.controller.utils.Responses;
-import airport.controller.utils.Status;
-
 /**
  *
  * @author Jose
