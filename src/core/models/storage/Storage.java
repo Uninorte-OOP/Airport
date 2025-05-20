@@ -100,4 +100,24 @@ public class Storage {
         passengers.add(passenger);
         return true;
     }
+    
+    public boolean updatePassenger(Passenger passenger) {
+        Passenger updatePassenger = null;
+        for (Passenger p : passengers) {
+            if (p.getId() == passenger.getId()) {
+                updatePassenger = p;
+                break;
+            }
+        }
+        if (updatePassenger == null) {
+            return false;
+        }
+        updatePassenger.setFirstname(passenger.getFirstname());
+        updatePassenger.setLastname(passenger.getLastname());
+        updatePassenger.setBirthDate(passenger.getBirthDate());
+        updatePassenger.setCountryPhoneCode(passenger.getCountryPhoneCode());
+        updatePassenger.setPhone(passenger.getPhone());
+        updatePassenger.setCountry(passenger.getCountry());
+        return true;
+    }
 }
