@@ -111,6 +111,5 @@ public class PassengerController {
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
-
     }
 }
