@@ -5,9 +5,6 @@
 package airport.models.database;
 
 import airport.models.Flight;
-import airport.models.Location;
-import airport.models.Passenger;
-import airport.models.Plane;
 import java.util.ArrayList;
 
 /**
