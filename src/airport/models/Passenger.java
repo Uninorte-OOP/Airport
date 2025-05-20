@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Passenger {
     
-    private final long id;
+    private long id; //Tenia final
     private String firstname;
     private String lastname;
     private LocalDate birthDate;
@@ -23,6 +23,11 @@ public class Passenger {
     private String country;
     private ArrayList<Flight> flights;
 
+    public Passenger() {
+    }
+
+    
+    
     public Passenger(long id, String firstname, String lastname, LocalDate birthDate, int countryPhoneCode, long phone, String country) {
         this.id = id;
         this.firstname = firstname;

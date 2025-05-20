@@ -4,20 +4,18 @@
  */
 package airport.view;
 
-import airport.models.Flight;
+import airport.controller.FlightController;
+import airport.controller.PassengerController;
+import airport.controller.utils.Responses;
 import airport.models.Flight;
 import airport.models.Location;
-import airport.models.Location;
-import airport.models.Passenger;
 import airport.models.Passenger;
 import airport.models.Plane;
-import airport.models.Plane;
-import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import javax.swing.UIManager;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -360,6 +358,11 @@ public class AirportFrame extends javax.swing.JFrame {
         jPanel2.add(Year, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 90, -1));
 
         Country.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        Country.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CountryActionPerformed(evt);
+            }
+        });
         jPanel2.add(Country, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 130, -1));
 
         Number.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
@@ -1425,6 +1428,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         jTabbedPane1.setEnabledAt(5, false);
         jTabbedPane1.setEnabledAt(6, false);
+        jTabbedPane1.setEnabledAt(7, false);
     }//GEN-LAST:event_administratorActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
@@ -1459,6 +1463,29 @@ public class AirportFrame extends javax.swing.JFrame {
 
         this.passengers.add(new Passenger(id, firstname, lastname, birthDate, phoneCode, phone, country));
         this.userSelect.addItem("" + id);
+        
+        Responses response = PassengerController.createPassenger(id, firstname, lastname, birthDate, phoneCode, phone, country);
+        
+//        Response response = PersonController.createPerson(id, firstname, lastname, age, gender);
+        
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+            
+            IDpass.setText("");
+            FirstName.setText("");
+            LastName.setText("");
+            Year.setText("");
+            Pre.setText("");
+            Number.setText("");
+            Country.setText("");
+            MONTH.setSelectedIndex(0);
+            DAY.setSelectedIndex(0);
+        }
+//     
     }//GEN-LAST:event_RegisterPassActionPerformed
 
     private void CreateAirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateAirActionPerformed
@@ -1686,6 +1713,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void YearUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YearUActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_YearUActionPerformed
+
+    private void CountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CountryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CountryActionPerformed
 
     
 
