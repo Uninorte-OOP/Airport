@@ -1,4 +1,3 @@
-
 package core.controllers;
 
 import core.controllers.utils.Response;
@@ -7,108 +6,110 @@ import core.models.Passenger;
 import core.models.storage.StoragePassenger;
 import java.time.LocalDate;
 
-
 public class PassengerController {
-    public static Response registerPassenger(long id, String firstname, String lastname, 
-            int year, int month, int day, int countryPhoneCode, long phone, String country){
+
+    public static Response registerPassenger(String id, String firstname, String lastname,
+            String year, String month, String day, String countryPhoneCode, String phone, String country) {
         try {
-            
-            String idS = String.valueOf(id);
-            String yearS= String.valueOf(year);
-            String monthS= String.valueOf(month);
-            String dayS= String.valueOf(day);
-            String countryPhoneCodeS = String.valueOf(countryPhoneCode);
-            String phoneS = String.valueOf(phone);
+            long idLong;
+            int yearInt;
+            int monthInt;
+            int dayInt;
+            int countryPhoneCodeInt;
+            long phoneLong;
             try {
-                if(id < 0 ){
+                idLong = Long.parseLong(id);
+                if (idLong < 0) {
                     return new Response("Id must be not negative", Status.BAD_REQUEST);
                 }
-                if(idS.length() > 15){
+                if (id.length() > 15) {
                     return new Response("Id must have less than 15 digits", Status.BAD_REQUEST);
                 }
-               
+
             } catch (NumberFormatException e) {
-                if(idS.equals("")){
+                if (id.equals("")) {
                     return new Response("Id must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Id must be numeric", Status.BAD_REQUEST);
             }
-            
-            if(firstname.equals("")){
-                return new Response("Firstname must be not empty", Status.BAD_REQUEST);  
+
+            if (firstname.equals("")) {
+                return new Response("Firstname must be not empty", Status.BAD_REQUEST);
             }
-            if(lastname.equals("")){
+            if (lastname.equals("")) {
                 return new Response("Lastname must be not empty", Status.BAD_REQUEST);
             }
-            
-               
-           try {
-                
-                if(year > 2025){
+
+            try {
+                yearInt = Integer.parseInt(year);
+                monthInt = Integer.parseInt(month);
+                dayInt = Integer.parseInt(day);
+                if (yearInt > 2025) {
                     return new Response("Year invalid", Status.BAD_REQUEST);
                 }
-                if (yearS.length() > 4) {
+                if (year.length() > 4) {
                     return new Response("Date of year invalid", Status.BAD_REQUEST);
                 }
 
-                if (month < 1  & month > 12) {
+                if (monthInt < 1 & monthInt > 12) {
                     return new Response("Month invalid", Status.BAD_REQUEST);
                 }
-                if (day < 1 & day > 31) {
+                if (dayInt < 1 & dayInt > 31) {
                     return new Response("Day invalid", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException e) {
-                if(yearS.equals("") && monthS.equals("") && dayS.equals("")){
-                    return new Response ("Birthdate must be not empty",Status.BAD_REQUEST);
+                if (year.equals("") && month.equals("") && day.equals("")) {
+                    return new Response("Birthdate must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Birthdate must be just numeric", Status.BAD_REQUEST);
             }
-            
+
             try {
-                
-                if(countryPhoneCodeS.length() > 3){
+                countryPhoneCodeInt = Integer.parseInt(countryPhoneCode);
+                if (countryPhoneCode.length() > 3) {
                     return new Response("Country phone code must have 3 or less than 3 digits", Status.BAD_REQUEST);
                 }
-                if(countryPhoneCode < 0){
+                if (countryPhoneCodeInt < 0) {
                     return new Response("Country phone code must be greater than 0", Status.BAD_REQUEST);
                 }
-                
+
             } catch (NumberFormatException e) {
-                if(countryPhoneCodeS.equals("")){
+                if (countryPhoneCode.equals("")) {
                     return new Response("Country phone code must be not empty", Status.BAD_REQUEST);
                 }
                 return new Response("Country phone code must be numeric", Status.BAD_REQUEST);
             }
-            
+
             try {
-                if(phone < 0){
+                phoneLong = Long.parseLong(phone);
+                if (phoneLong < 0) {
                     return new Response("Phone must be greater than 0", Status.BAD_REQUEST);
                 }
-                if (phoneS.length() > 11){
+                if (phone.length() > 11) {
                     return new Response("Phone must have less than 11 digits", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException ex) {
-                if(phoneS.equals("")){
-                return new Response("Phone must be not empty", Status.BAD_REQUEST);
-            }
+                if (phone.equals("")) {
+                    return new Response("Phone must be not empty", Status.BAD_REQUEST);
+                }
                 return new Response("Phone number must be numeric", Status.BAD_REQUEST);
             }
-            
-            if(country.equals("")){
+
+            if (country.equals("")) {
                 return new Response("Country must be not empty", Status.BAD_REQUEST);
             }
-            
-            LocalDate birthDate = LocalDate.of(year, month, day);
+
+            LocalDate birthDate = LocalDate.of(yearInt, monthInt, dayInt);
             StoragePassenger storagePass = StoragePassenger.getInstance();
-            if(!storagePass.addPassenger(new Passenger(id, firstname, lastname, birthDate, 
-                    countryPhoneCode, phone, country))){
+            if (!storagePass.addPassenger(new Passenger(idLong, firstname, lastname, birthDate,
+                    countryPhoneCodeInt, phoneLong, country))) {
                 return new Response("Passenger with that id already exists", Status.BAD_REQUEST);
             }
             return new Response("Passenger registered successfully", Status.CREATED);
-            
+
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
-        
+
     }
 }
