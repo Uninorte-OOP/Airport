@@ -105,6 +105,7 @@ public class AirportController implements AirportControllerInterface, AirportVie
     @Override
     public void onSavedLocation(){
         this.view.clearLocationForm();
+        this.view.updateLocationLists(this.storage.getLocations());
     }
 
     private boolean isLocationFormValid(LocationForm form) {

@@ -4,6 +4,7 @@
  */
 package airport.interfaces;
 
+import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import java.util.ArrayList;
@@ -31,4 +32,5 @@ public interface AirportViewInterface {
 
     public void updatePassengerLists(ArrayList<Passenger> passengers);
     public void updatePlaneLists(ArrayList<Plane> Planes);
+    public void updateLocationLists(ArrayList<Location> Locations);
 }

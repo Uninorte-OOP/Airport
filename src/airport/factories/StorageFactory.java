@@ -54,11 +54,18 @@ class StorageFactoryImpl implements StorageInterface {
         this.planes.add(plane);
         this.callback.onSavedPlane();
     }
-    
+
     @Override
     public void saveLocation(Location location) {
         this.locations.add(location);
+        this.callback.onSavedLocation();
     }
+
+    @Override
+    public ArrayList<Location> getLocations() {
+        return this.locations;
+    }
+    
 
     @Override
     public ArrayList<Passenger> getPassengers() {

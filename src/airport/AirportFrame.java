@@ -80,6 +80,26 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
     }
 
     @Override
+    public void updateLocationLists(ArrayList<Location> locations) {
+           DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
+        model.setRowCount(0);
+        this.jComboBox2.removeAllItems();
+        this.jComboBox3.removeAllItems();
+        this.jComboBox4.removeAllItems();
+        
+        for (Location location : locations) {
+            model.addRow(new Object[]{
+                 location.getAirportCity(), location.getAirportCountry(),location.getAirportId(), location.getAirportLatitude(), location.getAirportLongitude(),location.getAirportName()});
+
+            this.jComboBox2.addItem(location.getAirportId());
+            this.jComboBox3.addItem(location.getAirportId());
+            this.jComboBox4.addItem(location.getAirportId());
+        }
+    }
+    
+    
+
+    @Override
     public void subscribeObserver(AirportViewObserver observer) {
         this.observer = observer;
     }

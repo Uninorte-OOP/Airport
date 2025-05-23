@@ -29,7 +29,12 @@ public class Location {
     }
 
     public Location(LocationForm form) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    this.airportId = form.getAirportId();
+        this.airportName = form.getAirportName();
+        this.airportCity = form.getAirportCity();
+        this.airportCountry = form.getAirportCountry();
+        this.airportLatitude = form.getAirportLatitude();
+        this.airportLongitude = form.getAirportLongitude();
     }
 
     public String getAirportId() {
@@ -55,5 +60,25 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
-    
+
+    public void setAirportName(String airportName) {
+        this.airportName = airportName;
+    }
+
+    public void setAirportCity(String airportCity) {
+        this.airportCity = airportCity;
+    }
+
+    public void setAirportCountry(String airportCountry) {
+        this.airportCountry = airportCountry;
+    }
+
+    public void setAirportLatitude(double airportLatitude) {
+        this.airportLatitude = airportLatitude;
+    }
+
+    public void setAirportLongitude(double airportLongitude) {
+        this.airportLongitude = airportLongitude;
+    }
+
 }

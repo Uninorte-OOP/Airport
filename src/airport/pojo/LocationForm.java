@@ -6,10 +6,46 @@ package airport.pojo;
 
 /**
  *
- * @author alejandro
+ * @author miguel
  */
 public class LocationForm {
-    public LocationForm(String id, String name,String city,String country, double latitude, double longitude){
-        
+            String airportId;
+            String airportName;
+            String airportCity;
+            String airportCountry;
+            double airportLatitude;
+            double airportLongitude;
+       public LocationForm(String airportId, String airportName, String airportCity, String airportCountry, double airportLatitude, double airportLongitude) {
+        this.airportId = airportId;
+        this.airportName = airportName;
+        this.airportCity = airportCity;
+        this.airportCountry = airportCountry;
+        this.airportLatitude = airportLatitude;
+        this.airportLongitude = airportLongitude;
     }
+
+    public String getAirportId() {
+        return airportId;
+    }
+
+    public String getAirportName() {
+        return airportName;
+    }
+
+    public String getAirportCity() {
+        return airportCity;
+    }
+
+    public String getAirportCountry() {
+        return airportCountry;
+    }
+
+    public double getAirportLatitude() {
+        return airportLatitude;
+    }
+
+    public double getAirportLongitude() {
+        return airportLongitude;
+    }
+       
 }
