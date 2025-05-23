@@ -4,6 +4,8 @@
  */
 package airport;
 
+import airport.pojo.LocationForm;
+
 /**
  *
  * @author edangulo
@@ -24,6 +26,10 @@ public class Location {
         this.airportCountry = airportCountry;
         this.airportLatitude = airportLatitude;
         this.airportLongitude = airportLongitude;
+    }
+
+    public Location(LocationForm form) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public String getAirportId() {

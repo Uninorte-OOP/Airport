@@ -4,6 +4,12 @@
  */
 package airport;
 
+import airport.interfaces.AirportViewInterface;
+import airport.interfaces.AirportViewObserver;
+import airport.pojo.AirplaneForm;
+import airport.pojo.FlightForm;
+import airport.pojo.LocationForm;
+import airport.pojo.PassengerForm;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -16,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author edangulo
  */
-public class AirportFrame extends javax.swing.JFrame {
+public class AirportFrame extends javax.swing.JFrame implements AirportViewInterface {
 
     /**
      * Creates new form AirportFrame
@@ -26,6 +32,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private ArrayList<Plane> planes;
     private ArrayList<Location> locations;
     private ArrayList<Flight> flights;
+    private AirportViewObserver observer;
 
     public AirportFrame() {
         initComponents();
@@ -45,6 +52,93 @@ public class AirportFrame extends javax.swing.JFrame {
         this.blockPanels();
     }
 
+    @Override
+    public void updatePassengerLists(ArrayList<Passenger> passengers) {
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        
+        this.userSelect.removeAllItems();
+        for (Passenger passenger : passengers) {
+            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
+            this.userSelect.addItem("" + passenger.getId());
+        }
+        
+    }
+
+    @Override
+    public void subscribeObserver(AirportViewObserver observer) {
+        this.observer = observer;
+    }
+
+    @Override
+    public void enablePassengerTabs() {
+        if (administrator.isSelected()) {
+            administrator.setSelected(false);
+        }
+        for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
+
+            jTabbedPane1.setEnabledAt(i, false);
+
+        }
+        jTabbedPane1.setEnabledAt(9, true);
+        jTabbedPane1.setEnabledAt(5, true);
+        jTabbedPane1.setEnabledAt(6, true);
+        jTabbedPane1.setEnabledAt(7, true);
+        jTabbedPane1.setEnabledAt(11, true);
+    }
+
+    @Override
+    public void enableAdministratorTabs() {
+        if (user.isSelected()) {
+            user.setSelected(false);
+            userSelect.setSelectedIndex(0);
+
+        }
+        for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
+                jTabbedPane1.setEnabledAt(i, true);
+        }
+        jTabbedPane1.setEnabledAt(5, false);
+        jTabbedPane1.setEnabledAt(6, false);
+    }
+
+    @Override
+    public void clearPassengerForm() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+    }
+
+    @Override
+    public void clearAirplaneForm() {
+        jTextField8.setText("");
+        jTextField9.setText("");
+        jTextField10.setText("");
+        jTextField11.setText("");
+        jTextField12.setText("");
+    }
+
+    @Override
+    public void clearLocationForm() {
+        jTextField13.setText("");
+        jTextField14.setText("");
+        jTextField15.setText("");
+        jTextField16.setText("");
+        jTextField17.setText("");
+        jTextField18.setText("");
+    }
+
+    @Override
+    public void clearFlightForm() {
+        jTextField19.setText("");
+        jTextField21.setText("");
+    }
+    
+    
     private void blockPanels() {
         //9, 11
         for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
@@ -403,47 +497,47 @@ public class AirportFrame extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel11.setText("ID:");
         jPanel3.add(jLabel11);
-        jLabel11.setBounds(53, 96, 22, 25);
+        jLabel11.setBounds(53, 96, 26, 22);
 
         jTextField8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(jTextField8);
-        jTextField8.setBounds(180, 93, 130, 31);
+        jTextField8.setBounds(180, 93, 130, 28);
 
         jLabel12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel12.setText("Brand:");
         jPanel3.add(jLabel12);
-        jLabel12.setBounds(53, 157, 50, 25);
+        jLabel12.setBounds(53, 157, 58, 22);
 
         jTextField9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(jTextField9);
-        jTextField9.setBounds(180, 154, 130, 31);
+        jTextField9.setBounds(180, 154, 130, 28);
 
         jTextField10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(jTextField10);
-        jTextField10.setBounds(180, 213, 130, 31);
+        jTextField10.setBounds(180, 213, 130, 28);
 
         jLabel13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel13.setText("Model:");
         jPanel3.add(jLabel13);
-        jLabel13.setBounds(53, 216, 55, 25);
+        jLabel13.setBounds(53, 216, 60, 22);
 
         jTextField11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(jTextField11);
-        jTextField11.setBounds(180, 273, 130, 31);
+        jTextField11.setBounds(180, 273, 130, 28);
 
         jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel14.setText("Max Capacity:");
         jPanel3.add(jLabel14);
-        jLabel14.setBounds(53, 276, 109, 25);
+        jLabel14.setBounds(53, 276, 125, 22);
 
         jTextField12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(jTextField12);
-        jTextField12.setBounds(180, 333, 130, 31);
+        jTextField12.setBounds(180, 333, 130, 28);
 
         jLabel15.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel15.setText("Airline:");
         jPanel3.add(jLabel15);
-        jLabel15.setBounds(53, 336, 70, 25);
+        jLabel15.setBounds(53, 336, 70, 22);
 
         jButton9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jButton9.setText("Create");
@@ -1402,32 +1496,11 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_panelRound2MouseDragged
 
     private void administratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_administratorActionPerformed
-        if (user.isSelected()) {
-            user.setSelected(false);
-            userSelect.setSelectedIndex(0);
-
-        }
-        for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
-                jTabbedPane1.setEnabledAt(i, true);
-        }
-        jTabbedPane1.setEnabledAt(5, false);
-        jTabbedPane1.setEnabledAt(6, false);
+        this.observer.onSelectedAdministratorType();
     }//GEN-LAST:event_administratorActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
-        if (administrator.isSelected()) {
-            administrator.setSelected(false);
-        }
-        for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
-
-            jTabbedPane1.setEnabledAt(i, false);
-
-        }
-        jTabbedPane1.setEnabledAt(9, true);
-        jTabbedPane1.setEnabledAt(5, true);
-        jTabbedPane1.setEnabledAt(6, true);
-        jTabbedPane1.setEnabledAt(7, true);
-        jTabbedPane1.setEnabledAt(11, true);
+        this.observer.onSelectedPassengerType();
     }//GEN-LAST:event_userActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1443,12 +1516,20 @@ public class AirportFrame extends javax.swing.JFrame {
         String country = jTextField4.getText();
 
         LocalDate birthDate = LocalDate.of(year, month, day);
+        
+        PassengerForm form = new PassengerForm(id,firstname,lastname,year,month,day,phoneCode,phone,country,birthDate);
+        this.observer.onRegisterPassengerIntent(form);
+        
+        /*
+        
 
         this.passengers.add(new Passenger(id, firstname, lastname, birthDate, phoneCode, phone, country));
         this.userSelect.addItem("" + id);
+        */
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        
         // TODO add your handling code here:
         String id = jTextField8.getText();
         String brand = jTextField9.getText();
@@ -1456,9 +1537,10 @@ public class AirportFrame extends javax.swing.JFrame {
         int maxCapacity = Integer.parseInt(jTextField11.getText());
         String airline = jTextField12.getText();
 
-        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+         AirplaneForm form = new AirplaneForm ( id, brand, model, maxCapacity, airline);
+         this.observer.onRegisterAirplaneIntent(form);
 
-        this.jComboBox1.addItem(id);
+        //this.jComboBox1.addItem(id);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -1470,11 +1552,13 @@ public class AirportFrame extends javax.swing.JFrame {
         double latitude = Double.parseDouble(jTextField17.getText());
         double longitude = Double.parseDouble(jTextField18.getText());
 
-        this.locations.add(new Location(id, name, city, country, latitude, longitude));
+        LocationForm form = new LocationForm( id, name, city, country, latitude, longitude);
+        this.observer.onRegisterLocationIntent(form);
+        /*this.locations.add(new Location(id, name, city, country, latitude, longitude));
 
         this.jComboBox2.addItem(id);
         this.jComboBox3.addItem(id);
-        this.jComboBox4.addItem(id);
+        this.jComboBox4.addItem(id);*/
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -1495,8 +1579,11 @@ public class AirportFrame extends javax.swing.JFrame {
         int minutesDurationsScale = Integer.parseInt(DAY4.getItemAt(DAY4.getSelectedIndex()));
 
         LocalDateTime departureDate = LocalDateTime.of(year, month, day, hour, minutes);
+        
+        FlightForm form = new FlightForm (id, planeId, departureLocationId , arrivalLocationId, scaleLocationId, year, month, day, hour,  minutes,  hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
+        this.observer.onRegisterFlightIntent(form);
 
-        Plane plane = null;
+        /*Plane plane = null;
         for (Plane p : this.planes) {
             if (planeId.equals(p.getId())) {
                 plane = p;
@@ -1519,12 +1606,12 @@ public class AirportFrame extends javax.swing.JFrame {
         }
 
         if (scale == null) {
-            this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
+           this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
         } else {
             this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale));
         }
 
-        this.jComboBox5.addItem(id);
+        this.jComboBox5.addItem(id);*/
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1616,12 +1703,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-        model.setRowCount(0);
-        for (Passenger passenger : this.passengers) {
-            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
-        }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1830,4 +1912,5 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton user;
     private javax.swing.JComboBox<String> userSelect;
     // End of variables declaration//GEN-END:variables
+
 }
