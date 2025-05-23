@@ -82,7 +82,8 @@ public class AirportController implements AirportControllerInterface, AirportVie
     
     @Override
     public void onSavedPlane(){
-        this.view.clearAirplaneForm();    
+        this.view.clearAirplaneForm();
+        this.view.updatePlaneLists(this.storage.getPlanes());
     }
     
     private boolean isAirplaneFormValid(AirplaneForm form) {

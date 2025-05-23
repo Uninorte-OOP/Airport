@@ -19,6 +19,7 @@ public interface StorageInterface {
     void savePlane(Plane plane);
     void saveLocation(Location location);
     ArrayList<Passenger> getPassengers();
+    ArrayList<Plane> getPlanes();
     void setCallback(Callback callback);
     
     public interface Callback {

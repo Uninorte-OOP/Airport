@@ -52,6 +52,7 @@ class StorageFactoryImpl implements StorageInterface {
     @Override
     public void savePlane(Plane plane) {
         this.planes.add(plane);
+        this.callback.onSavedPlane();
     }
     
     @Override
@@ -62,6 +63,11 @@ class StorageFactoryImpl implements StorageInterface {
     @Override
     public ArrayList<Passenger> getPassengers() {
         return this.passengers;
+    }
+
+    @Override
+    public ArrayList<Plane> getPlanes() {
+        return this.planes;
     }
     
     
