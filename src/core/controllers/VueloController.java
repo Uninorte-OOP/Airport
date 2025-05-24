@@ -5,7 +5,9 @@
 package core.controllers;
 
 import core.controllers.utils.Response;
+import core.models.Vuelo;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -17,8 +19,7 @@ public class VueloController {
     private final ServicioAeropuertos servicioAeropuertos;
     private final ServicioPasajeros servicioPasajeros;
 
-    public VueloController(ServicioVuelos servicio, ServicioAviones servicioAviones,
-                           ServicioAeropuertos servicioAeropuertos, ServicioPasajeros servicioPasajeros) {
+    public VueloController(ServicioVuelos servicio,ServicioAviones servicioAviones,ServicioAeropuertos servicioAeropuertos,ServicioPasajeros servicioPasajeros) {
         this.servicio = servicio;
         this.servicioAviones = servicioAviones;
         this.servicioAeropuertos = servicioAeropuertos;
@@ -38,23 +39,40 @@ public class VueloController {
     }
 
     public Response<String> añadirPasajero(String idVuelo, long idPasajero) {
-        if (!servicio.existe(idVuelo)) return new Response<>(404, "Vuelo no encontrado", null);
-        if (!servicioPasajeros.existe(idPasajero)) return new Response<>(404, "Pasajero no encontrado", null);
+        if (!servicio.existe(idVuelo)) {
+            return new Response<>(404, "Vuelo no encontrado", null);
+        }
+        if (!servicioPasajeros.existe(idPasajero)) {
+            return new Response<>(404, "Pasajero no encontrado", null);
+        }
         servicio.añadirPasajero(idVuelo, idPasajero);
         return new Response<>(200, "Pasajero añadido al vuelo", null);
     }
 
     public Response<String> retrasarVuelo(String idVuelo, int horas, int minutos) {
-        if (!servicio.existe(idVuelo)) return new Response<>(404, "Vuelo no encontrado", null);
-        if (horas <= 0 && minutos <= 0) return new Response<>(400, "Tiempo de retraso inválido", null);
+        if (!servicio.existe(idVuelo)) {
+            return new Response<>(404, "Vuelo no encontrado", null);
+        }
+        if (horas < 0 || minutos < 0 || (horas == 0 && minutos == 0)) {
+            return new Response<>(400, "Tiempo de retraso inválido", null);
+        }
         servicio.retrasar(idVuelo, horas, minutos);
         return new Response<>(200, "Vuelo retrasado", null);
     }
 
     public Response<ArrayList<Vuelo>> obtenerVuelosOrdenados() {
         ArrayList<Vuelo> vuelos = servicio.obtenerTodosOrdenadosPorFecha();
-        ArrayList<Vuelo> copia = vuelos.stream().map(Vuelo::clonar).collect(Collectors.toList());
+        ArrayList<Vuelo> copia = vuelos.stream().map(Vuelo::clonar).collect(Collectors.toCollection(ArrayList::new));
         return new Response<>(200, "Vuelos obtenidos", copia);
+    }
+
+    public Response<ArrayList<Vuelo>> obtenerVuelosPorPasajero(long idPasajero) {
+        if (!servicioPasajeros.existe(idPasajero)) {
+            return new Response<>(404, "Pasajero no encontrado", null);
+        }
+        ArrayList<Vuelo> vuelos = servicio.obtenerVuelosPorPasajeroOrdenados(idPasajero);
+        ArrayList<Vuelo> copia = vuelos.stream().map(Vuelo::clonar).collect(Collectors.toCollection(ArrayList::new));
+        return new Response<>(200, "Vuelos del pasajero obtenidos", copia);
     }
 
     private boolean validarVuelo(Vuelo v) {
@@ -63,7 +81,8 @@ public class VueloController {
         if (!servicioAviones.existe(v.getAvionId())) return false;
         if (!servicioAeropuertos.existe(v.getOrigenId())) return false;
         if (!servicioAeropuertos.existe(v.getDestinoId())) return false;
-        if (v.getFechaSalida() == null || v.getDuracion().isZero()) return false;
+        if (v.getFechaSalida() == null) return false;
+        if (v.getDuracion() == null || v.getDuracion().isZero()) return false;
         return true;
     }
 }
