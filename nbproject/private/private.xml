@@ -3,6 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/C:/Users/jfenr/Desktop/PARCIAL_3_POO/Airport/src/core/views/AirportFrame.java</file>
+            <file>file:/C:/Users/jfenr/Desktop/PARCIAL_3_POO/Airport/src/core/controllers/PasajeroController.java</file>
+            <file>file:/C:/Users/jfenr/Desktop/PARCIAL_3_POO/Airport/src/core/models/Pasajero.java</file>
+            <file>file:/C:/Users/jfenr/Desktop/PARCIAL_3_POO/Airport/src/core/controllers/utils/Response.java</file>
+            <file>file:/C:/Users/jfenr/Desktop/PARCIAL_3_POO/Airport/src/core/services/ServicioPasajeros.java</file>
+=======
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/core/controllers/PasajeroController.java</file>
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/airport/Flight.java</file>
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/core/models/Vuelo.java</file>
@@ -18,6 +25,7 @@
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/core/controllers/AeropuertoController.java</file>
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/airport/Plane.java</file>
             <file>file:/C:/Users/NICOLAS%20ARIAS/OneDrive/Escritorio/Parcial%20Poo/Airport/src/core/controllers/VueloController.java</file>
+>>>>>>> origin/main
         </group>
     </open-files>
 </project-private>

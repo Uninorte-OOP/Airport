@@ -17,11 +17,20 @@ import java.util.stream.Collectors;
  */
 public class PasajeroController {
     private final ServicioPasajeros servicio;
+    private static PasajeroController instancia;
 
     public PasajeroController(ServicioPasajeros servicio) {
         this.servicio = servicio;
     }
-
+    
+    // Método estático para obtener la instancia (Singleton)
+    public static PasajeroController getInstance(ServicioPasajeros servicio) {
+        if (instancia == null) {
+            instancia = new PasajeroController(servicio);
+        }
+        return instancia;
+    }
+    
     public Response<Pasajero> registrarPasajero(Pasajero pasajero) {
         if (!validarPasajero(pasajero)) {
             return new Response<>(400, "Datos inválidos", null);

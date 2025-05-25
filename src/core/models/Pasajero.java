@@ -27,8 +27,7 @@ public class Pasajero implements Cloneable{
     private String pais;
     private final ArrayList<Vuelo> vuelos;
 
-    public Pasajero(long id, String nombre, String apellido, LocalDate fechaNacimiento,
-                    int codigoPaisTelefono, long telefono, String pais) {
+    public Pasajero(long id, String nombre, String apellido, LocalDate fechaNacimiento, int codigoPaisTelefono, long telefono, String pais) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
