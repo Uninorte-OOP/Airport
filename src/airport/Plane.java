@@ -4,7 +4,6 @@
  */
 package airport;
 
-import airport.pojo.AirplaneForm;
 import java.util.ArrayList;
 
 /**
@@ -28,14 +27,6 @@ public class Plane {
         this.airline = airline;
         this.flights = new ArrayList<>();
     }
-
-    public Plane(AirplaneForm form) {
-         this.id = form.getId();
-        this.brand = form.getBrand();
-        this.model = form.getModel();
-        this.maxCapacity = form.getMaxCapacity();
-        this.airline = form.getAirline();
-        this.flights = new ArrayList<>();}
 
     public void addFlight(Flight flight) {
         this.flights.add(flight);

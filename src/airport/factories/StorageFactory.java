@@ -9,6 +9,7 @@ import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import airport.drivers.StorageInterface;
+import airport.enums.AirportUser;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +28,7 @@ class StorageFactoryImpl implements StorageInterface {
     private ArrayList<Location> locations;
     private ArrayList<Flight> flights;
     private Callback callback;
+    private AirportUser userType;
     
     
     StorageFactoryImpl() {
@@ -40,7 +42,16 @@ class StorageFactoryImpl implements StorageInterface {
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
-    
+
+    @Override
+    public void setUserType(AirportUser airportUser) {
+        this.userType = airportUser;
+    }
+
+    @Override
+    public AirportUser getUserType() {
+        return this.userType;
+    }
     
     
     @Override

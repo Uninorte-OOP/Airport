@@ -8,6 +8,7 @@ import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import airport.controllers.AirportController;
+import airport.enums.AirportUser;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +23,10 @@ public interface StorageInterface {
     ArrayList<Plane> getPlanes();
     ArrayList<Location> getLocations();
     void setCallback(Callback callback);
+
+    public void setUserType(AirportUser airportUser);
+
+    public AirportUser getUserType();
     
     public interface Callback {
         void onSavedPassenger();

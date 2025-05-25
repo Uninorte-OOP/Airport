@@ -11,19 +11,17 @@ import java.time.LocalDate;
  * @author miguel
  */
 public class PassengerForm {
-
-    long id;
+    String id;
     String firstname;
     String lastname;
-    int year;
-    int month;
-    int day;
-    int phoneCode;
-    long phone;
+    String year;
+    String month;
+    String day;
+    String phoneCode;
+    String phone;
     String country;
-    LocalDate birthDate;
     
-    public PassengerForm(long id, String firstname, String lastname, int year, int month, int day, int phoneCode, long phone, String country, LocalDate birthDate) {
+    public PassengerForm(String id, String firstname, String lastname, String year, String month, String day, String phoneCode, String phone, String country) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -33,10 +31,13 @@ public class PassengerForm {
         this.phoneCode = phoneCode;
         this.phone = phone;
         this.country = country;
-        this.birthDate = birthDate;
     }
 
-    public long getId() {
+    public PassengerForm() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -48,34 +49,27 @@ public class PassengerForm {
         return lastname;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public int getMonth() {
+    public String getMonth() {
         return month;
     }
 
-    public int getDay() {
+    public String getDay() {
         return day;
     }
 
-    public int getPhoneCode() {
+    public String getPhoneCode() {
         return phoneCode;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
     public String getCountry() {
         return country;
     }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-    
-    
-    
 }

@@ -4,14 +4,15 @@ import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import airport.drivers.StorageInterface;
+import airport.enums.AirportUser;
 import airport.interfaces.AirportControllerInterface;
-import airport.interfaces.AirportModelInterface;
 import airport.interfaces.AirportViewInterface;
 import airport.interfaces.AirportViewObserver;
 import airport.pojo.AirplaneForm;
 import airport.pojo.FlightForm;
 import airport.pojo.LocationForm;
 import airport.pojo.PassengerForm;
+import java.time.LocalDate;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -23,12 +24,10 @@ import airport.pojo.PassengerForm;
  * @author miguel
  */
 public class AirportController implements AirportControllerInterface, AirportViewObserver, StorageInterface.Callback {
-    private AirportModelInterface model;
     private AirportViewInterface view;
     private StorageInterface storage;
     
-    public AirportController(AirportModelInterface model, AirportViewInterface view, StorageInterface storage) {
-        this.model = model;
+    public AirportController(AirportViewInterface view, StorageInterface storage) {
         this.view = view;
         this.storage = storage;
         this.storage.setCallback(this);
@@ -41,12 +40,23 @@ public class AirportController implements AirportControllerInterface, AirportVie
     
     @Override
     public void onSelectedPassengerType() {
-        this.view.enablePassengerTabs();
+        this.storage.setUserType(AirportUser.Passenger);
+        updateMainTab();
     }
     
     @Override
     public void onSelectedAdministratorType() {
-        this.view.enableAdministratorTabs();
+        this.storage.setUserType(AirportUser.Administrator);
+        updateMainTab();
+    }
+    
+    private void updateMainTab() {
+        if(this.storage.getUserType() == AirportUser.Passenger) {
+            this.view.enablePassengerTabs();
+        }
+        if(this.storage.getUserType() == AirportUser.Administrator) {
+            this.view.enableAdministratorTabs();
+        }
     }
     
     @Override
@@ -56,7 +66,14 @@ public class AirportController implements AirportControllerInterface, AirportVie
             return;
         }
         
-        Passenger passenger = new Passenger(form);
+        int year = Integer.parseInt(form.getYear());
+        int month = Integer.parseInt(form.getMonth());
+        int day = Integer.parseInt(form.getDay());
+        int phoneCode = Integer.parseInt(form.getPhoneCode());
+        long phone = Long.parseLong(form.getPhone());
+
+        LocalDate birthDate = LocalDate.of(year, month, day);
+        Passenger passenger = new Passenger(Long.parseLong(form.getId()), form.getFirstname(), form.getLastname(), birthDate, phoneCode, phone, form.getCountry());
         this.storage.savePassenger(passenger);
     }
     
@@ -76,10 +93,10 @@ public class AirportController implements AirportControllerInterface, AirportVie
         if(!isValidForm) {
             return;
         }
-        Plane plane = new Plane(form);
+        Plane plane = new Plane(form.getId(), form.getBrand(), form.getModel(), Integer.parseInt(form.getMaxCapacity()), form.getAirline());
         this.storage.savePlane(plane); 
     }
-    
+
     @Override
     public void onSavedPlane(){
         this.view.clearAirplaneForm();
@@ -97,9 +114,8 @@ public class AirportController implements AirportControllerInterface, AirportVie
             return;
         }
         
-        Location location = new Location(form);
+        Location location = new Location(form.getAirportId(),form.getAirportName(), form.getAirportCity(), form.getAirportCountry(), Double.parseDouble(form.getAirportLatitude()), Double.parseDouble(form.getAirportLongitude()));
         this.storage.saveLocation(location);
-        
     }
     
     @Override

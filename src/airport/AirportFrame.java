@@ -53,6 +53,19 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
     }
 
     @Override
+    public void clearPassengerForm() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+    }
+    
+    
+
+    @Override
     public void updatePassengerLists(ArrayList<Passenger> passengers) {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
@@ -63,7 +76,6 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
             this.userSelect.addItem("" + passenger.getId());
         }
-        
     }
 
     @Override
@@ -81,11 +93,15 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
     @Override
     public void updateLocationLists(ArrayList<Location> locations) {
-           DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
+        DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
         model.setRowCount(0);
         this.jComboBox2.removeAllItems();
         this.jComboBox3.removeAllItems();
         this.jComboBox4.removeAllItems();
+        
+        this.jComboBox2.addItem("Location");
+        this.jComboBox3.addItem("Location");
+        this.jComboBox4.addItem("Location");
         
         for (Location location : locations) {
             model.addRow(new Object[]{
@@ -96,8 +112,6 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             this.jComboBox4.addItem(location.getAirportId());
         }
     }
-    
-    
 
     @Override
     public void subscribeObserver(AirportViewObserver observer) {
@@ -133,17 +147,6 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         }
         jTabbedPane1.setEnabledAt(5, false);
         jTabbedPane1.setEnabledAt(6, false);
-    }
-
-    @Override
-    public void clearPassengerForm() {
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
-        jTextField6.setText("");
-        jTextField7.setText("");
     }
 
     @Override
@@ -1543,19 +1546,17 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        long id = Long.parseLong(jTextField2.getText());
+        String id = jTextField2.getText();
         String firstname = jTextField7.getText();
         String lastname = jTextField6.getText();
-        int year = Integer.parseInt(jTextField3.getText());
-        int month = Integer.parseInt(MONTH.getItemAt(MONTH.getSelectedIndex()));
-        int day = Integer.parseInt(DAY.getItemAt(DAY.getSelectedIndex()));
-        int phoneCode = Integer.parseInt(jTextField1.getText());
-        long phone = Long.parseLong(jTextField5.getText());
+        String birthYear = jTextField3.getText();
+        String birthMonth = MONTH.getItemAt(MONTH.getSelectedIndex());
+        String birthDay = DAY.getItemAt(DAY.getSelectedIndex());
+        String phoneCode = jTextField1.getText();
+        String phone = jTextField5.getText();
         String country = jTextField4.getText();
-
-        LocalDate birthDate = LocalDate.of(year, month, day);
         
-        PassengerForm form = new PassengerForm(id,firstname,lastname,year,month,day,phoneCode,phone,country,birthDate);
+        PassengerForm form = new PassengerForm(id,firstname,lastname,birthYear,birthMonth,birthDay,phoneCode,phone,country);
         this.observer.onRegisterPassengerIntent(form);
         
         /*
@@ -1572,7 +1573,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         String id = jTextField8.getText();
         String brand = jTextField9.getText();
         String model = jTextField10.getText();
-        int maxCapacity = Integer.parseInt(jTextField11.getText());
+        String maxCapacity = jTextField11.getText();
         String airline = jTextField12.getText();
 
          AirplaneForm form = new AirplaneForm ( id, brand, model, maxCapacity, airline);
@@ -1587,8 +1588,8 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         String name = jTextField14.getText();
         String city = jTextField15.getText();
         String country = jTextField16.getText();
-        double latitude = Double.parseDouble(jTextField17.getText());
-        double longitude = Double.parseDouble(jTextField18.getText());
+        String latitude = jTextField17.getText();
+        String longitude = jTextField18.getText();
 
         LocationForm form = new LocationForm( id, name, city, country, latitude, longitude);
         this.observer.onRegisterLocationIntent(form);

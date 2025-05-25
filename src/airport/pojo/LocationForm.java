@@ -9,13 +9,14 @@ package airport.pojo;
  * @author miguel
  */
 public class LocationForm {
-            String airportId;
-            String airportName;
-            String airportCity;
-            String airportCountry;
-            double airportLatitude;
-            double airportLongitude;
-       public LocationForm(String airportId, String airportName, String airportCity, String airportCountry, double airportLatitude, double airportLongitude) {
+    String airportId;
+    String airportName;
+    String airportCity;
+    String airportCountry;
+    String airportLatitude;
+    String airportLongitude;
+    
+    public LocationForm(String airportId, String airportName, String airportCity, String airportCountry, String airportLatitude, String airportLongitude) {
         this.airportId = airportId;
         this.airportName = airportName;
         this.airportCity = airportCity;
@@ -40,11 +41,11 @@ public class LocationForm {
         return airportCountry;
     }
 
-    public double getAirportLatitude() {
+    public String getAirportLatitude() {
         return airportLatitude;
     }
 
-    public double getAirportLongitude() {
+    public String getAirportLongitude() {
         return airportLongitude;
     }
        

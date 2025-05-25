@@ -4,7 +4,6 @@
  */
 package airport;
 
-import airport.pojo.PassengerForm;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -32,17 +31,6 @@ public class Passenger {
         this.countryPhoneCode = countryPhoneCode;
         this.phone = phone;
         this.country = country;
-        this.flights = new ArrayList<>();
-    }
-
-    public Passenger(PassengerForm form) {
-        this.id = form.getId();
-        this.firstname = form.getFirstname();
-        this.lastname = form.getLastname();
-        this.birthDate = form.getBirthDate();
-        this.countryPhoneCode = form.getPhoneCode();
-        this.phone = form.getPhone();
-        this.country = form.getCountry();
         this.flights = new ArrayList<>();
     }
 

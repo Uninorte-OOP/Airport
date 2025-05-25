@@ -8,10 +8,8 @@ import airport.controllers.AirportController;
 import airport.drivers.StorageInterface;
 import airport.factories.StorageFactory;
 import airport.interfaces.AirportControllerInterface;
-import airport.interfaces.AirportModelInterface;
 import airport.interfaces.AirportViewInterface;
 import airport.interfaces.AirportViewObserver;
-import airport.models.AirportModel;
 
 /**
  *
@@ -20,9 +18,8 @@ import airport.models.AirportModel;
 public class AirportMain {
     public static void main(String[] args) {
         AirportViewInterface view = new AirportFrame();
-        AirportModelInterface model = new AirportModel();
         StorageInterface storage = StorageFactory.createStorage();
-        AirportControllerInterface controller = new AirportController(model, view, storage);
+        AirportControllerInterface controller = new AirportController(view, storage);
         view.subscribeObserver((AirportViewObserver) controller);
         controller.startView();
     }

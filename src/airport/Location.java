@@ -4,14 +4,11 @@
  */
 package airport;
 
-import airport.pojo.LocationForm;
-
 /**
  *
  * @author edangulo
  */
 public class Location {
-    
     private final String airportId;
     private String airportName;
     private String airportCity;
@@ -26,15 +23,6 @@ public class Location {
         this.airportCountry = airportCountry;
         this.airportLatitude = airportLatitude;
         this.airportLongitude = airportLongitude;
-    }
-
-    public Location(LocationForm form) {
-    this.airportId = form.getAirportId();
-        this.airportName = form.getAirportName();
-        this.airportCity = form.getAirportCity();
-        this.airportCountry = form.getAirportCountry();
-        this.airportLatitude = form.getAirportLatitude();
-        this.airportLongitude = form.getAirportLongitude();
     }
 
     public String getAirportId() {

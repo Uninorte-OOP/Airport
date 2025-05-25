@@ -13,11 +13,11 @@ package airport.pojo;
 public class AirplaneForm {
 
     public String airline;
-    public int maxCapacity;
+    public String maxCapacity;
     public String model;
     public String brand;
     public String id;
-    public AirplaneForm(String id, String brand, String model, int maxCapacity, String airline) {
+    public AirplaneForm(String id, String brand, String model, String maxCapacity, String airline) {
        this.id = id;
        this.airline = airline;
        this.brand = brand;
@@ -29,7 +29,7 @@ public class AirplaneForm {
         return airline;
     }
 
-    public int getMaxCapacity() {
+    public String getMaxCapacity() {
         return maxCapacity;
     }
 
