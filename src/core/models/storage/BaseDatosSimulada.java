@@ -31,7 +31,7 @@ public class BaseDatosSimulada {
         String contenido = new String(Files.readAllBytes(Paths.get(rutaArchivo)));
         JSONObject json = new JSONObject(contenido);
 
-        // Cargar ubicaciones
+        
         JSONArray arrUbicaciones = json.getJSONArray("ubicaciones");
         for (int i = 0; i < arrUbicaciones.length(); i++) {
             JSONObject obj = arrUbicaciones.getJSONObject(i);
@@ -46,7 +46,7 @@ public class BaseDatosSimulada {
             ubicaciones.put(u.getIdAeropuerto(), u);
         }
 
-        // Cargar aviones
+        
         JSONArray arrAviones = json.getJSONArray("aviones");
         for (int i = 0; i < arrAviones.length(); i++) {
             JSONObject obj = arrAviones.getJSONObject(i);
@@ -60,7 +60,7 @@ public class BaseDatosSimulada {
             aviones.put(a.getId(), a);
         }
 
-        // Cargar pasajeros
+        
         JSONArray arrPasajeros = json.getJSONArray("pasajeros");
         for (int i = 0; i < arrPasajeros.length(); i++) {
             JSONObject obj = arrPasajeros.getJSONObject(i);
@@ -76,7 +76,7 @@ public class BaseDatosSimulada {
             pasajeros.put(p.getId(), p);
         }
 
-        // Cargar vuelos y relacionar objetos
+        
         JSONArray arrVuelos = json.getJSONArray("vuelos");
         for (int i = 0; i < arrVuelos.length(); i++) {
             JSONObject obj = arrVuelos.getJSONObject(i);
@@ -97,7 +97,7 @@ public class BaseDatosSimulada {
                     durM
             );
 
-            // Agregar pasajeros al vuelo y al vuelo al pasajero
+            
             JSONArray arrPasajerosVuelo = obj.getJSONArray("pasajeros");
             for (int j = 0; j < arrPasajerosVuelo.length(); j++) {
                 long idPasajero = arrPasajerosVuelo.getLong(j);
@@ -109,20 +109,34 @@ public class BaseDatosSimulada {
             }
 
             vuelos.put(vuelo.getId(), vuelo);
-            // Asociar vuelo a avión también
+            
             avion.agregarVuelo(vuelo);
         }
     }
-
-    // Métodos para obtener datos
+    public Map<String, Avion> getMapaAviones() {
+        return aviones;
+    }
+    public Map<String, Ubicacion> getMapaUbicaciones() {
+        return ubicaciones;
+    }
+    public Map<Long, Pasajero> getMapaPasajeros() {
+        return pasajeros;
+    }
+    public Map<String, Vuelo> getMapaVuelos() {
+        return vuelos;
+    }
     public Vuelo obtenerVuelo(String id) {
         return vuelos.get(id);
     }
-
+    public void agregarVuelo(Vuelo vuelo) {
+        vuelos.put(vuelo.getId(), vuelo);
+    }
     public Pasajero obtenerPasajero(long id) {
         return pasajeros.get(id);
     }
-
+    public void agregarAvion(Avion avion) {
+        aviones.put(avion.getId(), avion);
+    }
     public Avion obtenerAvion(String id) {
         return aviones.get(id);
     }

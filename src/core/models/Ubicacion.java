@@ -5,6 +5,7 @@
 package core.models;
 
 import java.util.Objects;
+import org.json.JSONObject;
 
 /**
  *
@@ -19,6 +20,9 @@ public class Ubicacion implements Cloneable{
     private double longitud;
 
     public Ubicacion(String idAeropuerto, String nombreAeropuerto, String ciudad, String pais, double latitud, double longitud) {
+        if (idAeropuerto == null || idAeropuerto.isEmpty()) {
+            throw new IllegalArgumentException("ID de aeropuerto no puede estar vacío");
+        }
         this.idAeropuerto = idAeropuerto;
         this.nombreAeropuerto = nombreAeropuerto;
         this.ciudad = ciudad;
@@ -49,5 +53,40 @@ public class Ubicacion implements Cloneable{
 
     public double getLongitud() {
         return longitud;
+    }
+
+    public Ubicacion clonar() {
+        return new Ubicacion(idAeropuerto, nombreAeropuerto, ciudad, pais, latitud, longitud);
+    }
+
+    public static Ubicacion desdeJSON(JSONObject json) {
+        String idAeropuerto = json.getString("idAeropuerto");
+        String nombreAeropuerto = json.getString("nombreAeropuerto");
+        String ciudad = json.getString("ciudad");
+        String pais = json.getString("pais");
+        double latitud = json.getDouble("latitud");
+        double longitud = json.getDouble("longitud");
+
+        return new Ubicacion(idAeropuerto, nombreAeropuerto, ciudad, pais, latitud, longitud);
+    }
+    @Override
+    public Ubicacion clone() {
+        try {
+            return (Ubicacion) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // No debería ocurrir
+        }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ubicacion)) return false;
+        Ubicacion that = (Ubicacion) o;
+        return idAeropuerto.equals(that.idAeropuerto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idAeropuerto);
     }
 }

@@ -7,6 +7,7 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.models.Avion;
+import core.services.ServicioAviones;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -25,18 +26,18 @@ public class AvionController {
         if (!validarAvion(avion)) {
             return new Response<>(400, "Datos inválidos", null);
         }
-        if (servicio.existe(avion.getId())) {
+        if (servicio.existeAvion(avion.getId())) {
             return new Response<>(409, "ID de avión ya existe", null);
         }
 
-        Avion copia = avion.clonar(); // Patrón Prototype
-        servicio.crear(copia);
+        Avion copia = avion.clone();
+        servicio.registrarAvion(copia);
         return new Response<>(201, "Avión creado", copia);
     }
 
     public Response<ArrayList<Avion>> obtenerAvionesOrdenados() {
-        ArrayList<Avion> aviones = servicio.obtenerTodosOrdenadosPorId(); // Asegúrate de que esté ordenado
-        ArrayList<Avion> copia = aviones.stream().map(Avion::clonar).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Avion> aviones = servicio.obtenerAvionesOrdenadosPorId();
+        ArrayList<Avion> copia = aviones.stream().map(Avion::clone).collect(Collectors.toCollection(ArrayList::new));
         return new Response<>(200, "Aviones obtenidos", copia);
     }
 
@@ -45,8 +46,12 @@ public class AvionController {
         if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
         if (a.getModelo() == null || a.getModelo().trim().isEmpty()) return false;
         if (a.getMarca() == null || a.getMarca().trim().isEmpty()) return false;
-        if (a.getCapacidad() <= 0) return false; // Suponiendo que el avión debe tener al menos una plaza
-
+        if (a.getCapacidadMaxima() <= 0) return false; // Suponiendo que el avión debe tener al menos una plaza
+        if (a == null) return false;
+        if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
+        if (a.getModelo() == null || a.getModelo().trim().isEmpty()) return false;
+        if (a.getMarca() == null || a.getMarca().trim().isEmpty()) return false;
+        if (a.getCapacidadMaxima() <= 0 || a.getCapacidadMaxima() > 1000) return false;
         return true;
     }
 }

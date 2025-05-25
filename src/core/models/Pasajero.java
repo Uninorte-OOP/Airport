@@ -4,10 +4,14 @@
  */
 package core.models;
 
+import core.services.ServicioVuelos;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -21,9 +25,10 @@ public class Pasajero implements Cloneable{
     private int codigoPaisTelefono;
     private long telefono;
     private String pais;
-    private ArrayList<Vuelo> vuelos;
+    private final ArrayList<Vuelo> vuelos;
 
-    public Pasajero(long id, String nombre, String apellido, LocalDate fechaNacimiento, int codigoPaisTelefono, long telefono, String pais) {
+    public Pasajero(long id, String nombre, String apellido, LocalDate fechaNacimiento,
+                    int codigoPaisTelefono, long telefono, String pais) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -63,10 +68,55 @@ public class Pasajero implements Cloneable{
     }
 
     public ArrayList<Vuelo> getVuelos() {
-        return vuelos;
+        return new ArrayList<>(vuelos);
     }
 
     public void agregarVuelo(Vuelo vuelo) {
-        vuelos.add(vuelo);
+        if (!vuelos.contains(vuelo)) {
+            vuelos.add(vuelo);
+        }
+    }
+
+    public Pasajero clone() {
+        Pasajero clon = new Pasajero(id, nombre, apellido, fechaNacimiento, codigoPaisTelefono, telefono, pais);
+        return clon;
+    }
+
+
+    public static Pasajero desdeJSON(JSONObject json, ServicioVuelos servicioVuelos) {
+        long id = json.getLong("id");
+        String nombre = json.getString("nombre");
+        String apellido = json.getString("apellido");
+        LocalDate fechaNacimiento = LocalDate.parse(json.getString("fechaNacimiento"), DateTimeFormatter.ISO_LOCAL_DATE);
+        int codigoPaisTelefono = json.getInt("codigoPaisTelefono");
+        long telefono = json.getLong("telefono");
+        String pais = json.getString("pais");
+
+        Pasajero pasajero = new Pasajero(id, nombre, apellido, fechaNacimiento, codigoPaisTelefono, telefono, pais);
+
+        if (json.has("vuelos")) {JSONArray vuelosJSON = json.getJSONArray("vuelos");
+            for (int i = 0; i < vuelosJSON.length(); i++) {
+                String idVuelo = vuelosJSON.getString(i);
+                Vuelo vuelo = servicioVuelos.buscarVuelo(idVuelo);
+                if (vuelo != null) {
+                    pasajero.agregarVuelo(vuelo);
+                }
+            }
+        }
+
+        return pasajero;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pasajero)) return false;
+        Pasajero pasajero = (Pasajero) o;
+        return id == pasajero.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -5,7 +5,11 @@
 package core.controllers;
 
 import core.controllers.utils.Response;
+import core.models.Aeropuerto;
+import core.models.Ubicacion;
+import core.services.ServicioAeropuertos;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -18,36 +22,37 @@ public class AeropuertoController {
         this.servicio = servicio;
     }
 
-    public Response<Aeropuerto> crearAeropuerto(Aeropuerto aeropuerto) {
-        if (!validarAeropuerto(aeropuerto)) {
+    public Response<Ubicacion> crearAeropuerto(Ubicacion ubicacion) {
+        if (!validarAeropuerto(ubicacion)) {
             return new Response<>(400, "Datos inválidos", null);
         }
-        if (servicio.existe(aeropuerto.getId())) {
+        if (servicio.existeAeropuerto(ubicacion.getIdAeropuerto())) {
             return new Response<>(409, "ID de aeropuerto ya existe", null);
         }
-        Aeropuerto copia = aeropuerto.clonar(); // Patrón Prototype
-        servicio.crear(copia);
+        Ubicacion copia = ubicacion.clonar(); 
+        servicio.registrarAeropuerto(copia);
         return new Response<>(201, "Aeropuerto creado", copia);
     }
 
-    public Response<ArrayList<Aeropuerto>> obtenerAeropuertosOrdenados() {
-        ArrayList<Aeropuerto> aeropuertos = servicio.obtenerTodosOrdenadosPorId(); // Asegúrate de que estén ordenados por ID
-        ArrayList<Aeropuerto> copia = aeropuertos.stream().map(Aeropuerto::clonar) // Patrón Prototype.collect(Collectors.toCollection(ArrayList::new));
+    public Response<ArrayList<Ubicacion>> obtenerAeropuertosOrdenados() {
+        ArrayList<Ubicacion> aeropuertos = new ArrayList<>(servicio.obtenerTodosLosAeropuertos());
+        aeropuertos.sort((a1, a2) -> a1.getIdAeropuerto().compareTo(a2.getIdAeropuerto()));
+        ArrayList<Ubicacion> copia = aeropuertos.stream().map(Ubicacion::clonar).collect(Collectors.toCollection(ArrayList::new));
         return new Response<>(200, "Aeropuertos obtenidos", copia);
     }
 
-    private boolean validarAeropuerto(Aeropuerto a) {
-        if (a == null) return false;
-        if (!a.getId().matches("[A-Z]{3}")) return false;
-        if (a.getNombre() == null || a.getNombre().trim().isEmpty()) return false;
-        if (a.getLatitud() < -90 || a.getLatitud() > 90) return false;
-        if (a.getLongitud() < -180 || a.getLongitud() > 180) return false;
-        if (!tieneMax4Decimales(a.getLatitud())) return false;
-        if (!tieneMax4Decimales(a.getLongitud())) return false;
+    private boolean validarAeropuerto(Ubicacion u) {
+        if (u == null) return false;
+        if (!u.getIdAeropuerto().matches("[A-Z]{3}")) return false;
+        if (u.getCiudad() == null || u.getCiudad().trim().isEmpty()) return false;
+        if (u.getPais() == null || u.getPais().trim().isEmpty()) return false;
+        if (!validarCoordenada(u.getLatitud(), -90, 90)) return false;
+        if (!validarCoordenada(u.getLongitud(), -180, 180)) return false;
         return true;
     }
 
-    private boolean tieneMax4Decimales(double valor) {
+    private boolean validarCoordenada(double valor, double min, double max) {
+        if (valor < min || valor > max) return false;
         String[] partes = String.valueOf(valor).split("\\.");
         return partes.length < 2 || partes[1].length() <= 4;
     }
