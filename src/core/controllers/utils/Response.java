@@ -20,7 +20,7 @@ public class Response<T> {
         this.datos = datos;
     }
 
-    // Getters
+    
     public int getCodigo() {
         return codigo;
     }
@@ -33,7 +33,7 @@ public class Response<T> {
         return datos;
     }
 
-    // Setters (opcional si no deseas mutabilidad)
+    
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
