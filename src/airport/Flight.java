@@ -25,21 +25,11 @@ public class Flight {
     private int hoursDurationScale;
     private int minutesDurationScale;
     
+    
 
-    public Flight(String id, Plane plane, Location departureLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival) {
-        this.id = id;
-        this.passengers = new ArrayList<>();
-        this.plane = plane;
-        this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
-        this.departureDate = departureDate;
-        this.hoursDurationArrival = hoursDurationArrival;
-        this.minutesDurationArrival = minutesDurationArrival;
-        
-        this.plane.addFlight(this);
-    }
 
-    public Flight(String id, Plane plane, Location departureLocation, Location scaleLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival, int hoursDurationScale, int minutesDurationScale) {
+    public Flight(String id, Plane plane, Location departureLocation, Location scaleLocation, Location arrivalLocation, 
+            LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival, int hoursDurationScale, int minutesDurationScale) {
         this.id = id;
         this.passengers = new ArrayList<>();
         this.plane = plane;
@@ -54,13 +44,13 @@ public class Flight {
         
         this.plane.addFlight(this);
     }
-    
-    public void addPassenger(Passenger passenger) {
-        this.passengers.add(passenger);
-    }
-    
+
     public String getId() {
         return id;
+    }
+
+    public Plane getPlane() {
+        return plane;
     }
 
     public Location getDepartureLocation() {
@@ -94,25 +84,117 @@ public class Flight {
     public int getMinutesDurationScale() {
         return minutesDurationScale;
     }
+    
 
-    public Plane getPlane() {
-        return plane;
+
+    public ArrayList<Passenger> getPassengers() {
+        return passengers;
     }
 
-    public void setDepartureDate(LocalDateTime departureDate) {
-        this.departureDate = departureDate;
+    public void setPassengers(ArrayList<Passenger> passengers) {
+        this.passengers = passengers;
+    }
+
+    public void setPlane(Plane plane) {
+        this.plane = plane;
+    }
+
+    public void setDepartureLocation(Location departureLocation) {
+        this.departureLocation = departureLocation;
+    }
+
+    public void setScaleLocation(Location scaleLocation) {
+        this.scaleLocation = scaleLocation;
+    }
+
+    public void setArrivalLocation(Location arrivalLocation) {
+        this.arrivalLocation = arrivalLocation;
+    }
+
+    public void setHoursDurationArrival(int hoursDurationArrival) {
+        this.hoursDurationArrival = hoursDurationArrival;
+    }
+
+    public void setMinutesDurationArrival(int minutesDurationArrival) {
+        this.minutesDurationArrival = minutesDurationArrival;
+    }
+
+    public void setHoursDurationScale(int hoursDurationScale) {
+        this.hoursDurationScale = hoursDurationScale;
+    }
+
+    public void setMinutesDurationScale(int minutesDurationScale) {
+        this.minutesDurationScale = minutesDurationScale;
+    }
+
+    public String getPlaneId() {
+        return plane.getId();
+    }
+
+    public String getDepartureLocationId() {
+        return departureLocation.getId();
+    }
+
+    public String getArrivalLocationId() {
+        return arrivalLocation.getId();
+    }
+
+    public String getScaleLocationId() {
+        return scaleLocation != null ? scaleLocation.getId() : null;
     }
     
-    public LocalDateTime calculateArrivalDate() {
-        return departureDate.plusHours(hoursDurationScale).plusHours(hoursDurationArrival).plusMinutes(minutesDurationScale).plusMinutes(minutesDurationArrival);
+    public int getYear() {
+    return departureDate.getYear();
+}
+
+    public int getMonth() {
+        return departureDate.getMonthValue(); // 1 a 12
+    }
+
+    public int getDay() {
+        return departureDate.getDayOfMonth();
+    }
+
+    public int getHour() {
+        return departureDate.getHour();
+    }
+
+    public int getMinutes() {
+        return departureDate.getMinute();
     }
     
-    public void delay(int hours, int minutes) {
-        this.departureDate = this.departureDate.plusHours(hours).plusMinutes(minutes);
+    public int getHoursDurationsArrival() {
+    return hoursDurationArrival;
+}
+
+    public int getMinutesDurationsArrival() {
+        return minutesDurationArrival;
     }
-    
-    public int getNumPassengers() {
-        return passengers.size();
+
+    public int getHoursDurationsScale() {
+        return hoursDurationScale;
     }
+
+    public int getMinutesDurationsScale() {
+        return minutesDurationScale;
+    }
+
+    Object calculateArrivalDate() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    Object getNumPassengers() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void addPassenger(Passenger passenger) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void delay(int hours, int minutes) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
     
 }

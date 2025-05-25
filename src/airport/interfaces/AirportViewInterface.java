@@ -4,6 +4,7 @@
  */
 package airport.interfaces;
 
+import airport.Flight;
 import airport.Location;
 import airport.Passenger;
 import airport.Plane;
@@ -29,5 +30,6 @@ public interface AirportViewInterface {
     public void updatePassengerLists(ArrayList<Passenger> passengers);
     public void updatePlaneLists(ArrayList<Plane> Planes);
     public void updateLocationLists(ArrayList<Location> Locations);
+    public void updateFlightLists(ArrayList<Flight> Fligts);
 
 }

@@ -11,6 +11,8 @@ import airport.Plane;
 import airport.drivers.StorageInterface;
 import airport.enums.AirportUser;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -25,7 +27,9 @@ public class StorageFactory {
 class StorageFactoryImpl implements StorageInterface {
     private ArrayList<Passenger> passengers;
     private ArrayList<Plane> planes;
+    private Map<String, Plane> planesMap;
     private ArrayList<Location> locations;
+    private Map<String, Location> locationsMap;
     private ArrayList<Flight> flights;
     private Callback callback;
     private AirportUser userType;
@@ -36,6 +40,8 @@ class StorageFactoryImpl implements StorageInterface {
         this.planes = new ArrayList<Plane>();
         this.locations = new ArrayList<Location>();
         this.flights = new ArrayList<Flight>();
+        this.planesMap = new HashMap();
+        this.locationsMap = new HashMap();
     }
 
     @Override
@@ -63,12 +69,14 @@ class StorageFactoryImpl implements StorageInterface {
     @Override
     public void savePlane(Plane plane) {
         this.planes.add(plane);
+        this.planesMap.put(plane.getId(), plane);
         this.callback.onSavedPlane();
     }
 
     @Override
     public void saveLocation(Location location) {
         this.locations.add(location);
+        this.locationsMap.put(location.getAirportId(), location);
         this.callback.onSavedLocation();
     }
 
@@ -87,6 +95,27 @@ class StorageFactoryImpl implements StorageInterface {
     public ArrayList<Plane> getPlanes() {
         return this.planes;
     }
-    
+
+    @Override
+    public void saveFlight(Flight flight) {
+        this.flights.add(flight);
+        this.callback.onSavedFlight();
+    }
+
+    @Override
+    public ArrayList<Flight> getFlights() {
+        return this.flights;
+    }
+
+    @Override
+    public Plane getPlaneById(String planeId) {
+        return this.planesMap.get(planeId);
+    }
+
+    @Override
+    public Location getLocationById(String locationId) {
+        return this.locationsMap.get(locationId);
+    }
+
     
 }

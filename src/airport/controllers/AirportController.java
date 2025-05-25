@@ -1,5 +1,6 @@
 package airport.controllers;
 
+import airport.Flight;
 import airport.Location;
 import airport.Passenger;
 import airport.Plane;
@@ -13,6 +14,7 @@ import airport.pojo.FlightForm;
 import airport.pojo.LocationForm;
 import airport.pojo.PassengerForm;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -131,16 +133,34 @@ public class AirportController implements AirportControllerInterface, AirportVie
     @Override
     public void onRegisterFlightIntent (FlightForm form){
         boolean isValidForm = isFlightFormValid(form);
-        if(isValidForm) {
-            this.view.clearFlightForm();    
+        if(!isValidForm) {    
+            return;
         }
-        else {
-            //this.view.clearPassengerForm();
-        } 
+        
+        Flight flight = new Flight(
+            form.getId(),
+            storage.getPlaneById(form.getPlaneId()),
+            storage.getLocationById(form.getDepartureLocationId()),
+            storage.getLocationById(form.getScaleLocationId()),
+            storage.getLocationById(form.getArrivalLocationId()),
+            LocalDateTime.of(form.getYear(), form.getMonth(), form.getDay(), form.getHoursDeparture(), form.getMinutesDeparture()),
+            form.getHoursDurationsArrival(),
+            form.getMinutesDurationsArrival(),
+            form.getHoursDurationsScale(),
+            form.getMinutesDurationsScale()
+        );
+        
+        this.storage.saveFlight(flight);    
     }
 
     private boolean isFlightFormValid(FlightForm form) {
         return true;
+    }
+
+    @Override
+    public void onSavedFlight() {
+        this.view.clearFlightForm();
+        this.view.updateFlightLists(this.storage.getFlights());
     }
     
 }

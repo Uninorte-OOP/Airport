@@ -90,7 +90,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             this.jComboBox1.addItem(plane.getId());
         }
     }
-
+    
     @Override
     public void updateLocationLists(ArrayList<Location> locations) {
         DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
@@ -112,7 +112,20 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             this.jComboBox4.addItem(location.getAirportId());
         }
     }
+    
+    @Override
+    public void updateFlightLists(ArrayList<Flight> fligths) {
+        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+        model.setRowCount(0);
+        this.jComboBox5.removeAllItems();
+        for (Flight flight : fligths) {
+            model.addRow(new Object[]{
+                flight.getId(), flight.getPlaneId(), flight.getDepartureLocationId(), flight.getArrivalLocationId(), flight.getScaleLocationId(), flight.getYear(), flight.getMonth(), flight.getDay(), flight.getHour(), flight.getMinutes(), flight.getHoursDurationsArrival(), flight.getMinutesDurationsArrival(), flight.getHoursDurationsScale(),flight.getMinutesDurationsScale()});
 
+            this.jComboBox5.addItem(flight.getId());
+        }
+    }
+    
     @Override
     public void subscribeObserver(AirportViewObserver observer) {
         this.observer = observer;
@@ -1607,20 +1620,23 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         String departureLocationId = jComboBox2.getItemAt(jComboBox2.getSelectedIndex());
         String arrivalLocationId = jComboBox3.getItemAt(jComboBox3.getSelectedIndex());
         String scaleLocationId = jComboBox4.getItemAt(jComboBox4.getSelectedIndex());
+
         int year = Integer.parseInt(jTextField21.getText());
         int month = Integer.parseInt(MONTH1.getItemAt(MONTH1.getSelectedIndex()));
         int day = Integer.parseInt(DAY1.getItemAt(DAY1.getSelectedIndex()));
         int hour = Integer.parseInt(MONTH2.getItemAt(MONTH2.getSelectedIndex()));
         int minutes = Integer.parseInt(DAY2.getItemAt(DAY2.getSelectedIndex()));
+
         int hoursDurationsArrival = Integer.parseInt(MONTH3.getItemAt(MONTH3.getSelectedIndex()));
         int minutesDurationsArrival = Integer.parseInt(DAY3.getItemAt(DAY3.getSelectedIndex()));
         int hoursDurationsScale = Integer.parseInt(MONTH4.getItemAt(MONTH4.getSelectedIndex()));
         int minutesDurationsScale = Integer.parseInt(DAY4.getItemAt(DAY4.getSelectedIndex()));
 
-        LocalDateTime departureDate = LocalDateTime.of(year, month, day, hour, minutes);
         
-        FlightForm form = new FlightForm (id, planeId, departureLocationId , arrivalLocationId, scaleLocationId, year, month, day, hour,  minutes,  hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
+        FlightForm form = new FlightForm( id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month, day, hour, minutes, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale,minutesDurationsScale);
         this.observer.onRegisterFlightIntent(form);
+        /*FlightForm form = new FlightForm (id, planeId, departureLocationId , arrivalLocationId, scaleLocationId, year, month, day, hour,  minutes,  hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
+        this.observer.onRegisterFlightIntent(form);*/
 
         /*Plane plane = null;
         for (Plane p : this.planes) {
