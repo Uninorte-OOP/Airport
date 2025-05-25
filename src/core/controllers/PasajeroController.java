@@ -6,6 +6,7 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.models.Pasajero;
+import core.services.ServicioPasajeros;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -15,11 +16,20 @@ import java.util.stream.Collectors;
  */
 public class PasajeroController {
     private final ServicioPasajeros servicio;
+    private static PasajeroController instancia;
 
     public PasajeroController(ServicioPasajeros servicio) {
         this.servicio = servicio;
     }
-
+    
+    // Método estático para obtener la instancia (Singleton)
+    public static PasajeroController getInstance(ServicioPasajeros servicio) {
+        if (instancia == null) {
+            instancia = new PasajeroController(servicio);
+        }
+        return instancia;
+    }
+    
     public Response<Pasajero> registrarPasajero(Pasajero pasajero) {
         if (!validarPasajero(pasajero)) {
             return new Response<>(400, "Datos inválidos", null);
@@ -54,7 +64,7 @@ public class PasajeroController {
         if (p == null) return false;
         if (p.getId() < 0 || String.valueOf(p.getId()).length() > 15) return false;
         if (p.getNombre() == null || p.getNombre().trim().isEmpty()) return false;
-        if (p.getCodigoTelefono() < 0 || String.valueOf(p.getCodigoTelefono()).length() > 3) return false;
+        if (p.getCodigoPaisTelefono() < 0 || String.valueOf(p.getCodigoPaisTelefono()).length() > 3) return false;
         if (p.getTelefono() < 0 || String.valueOf(p.getTelefono()).length() > 11) return false;
         if (p.getFechaNacimiento() == null) return false;
         return true;

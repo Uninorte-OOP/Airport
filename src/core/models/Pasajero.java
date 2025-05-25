@@ -15,22 +15,22 @@ import java.util.Objects;
  */
 public class Pasajero implements Cloneable{
     private final long id;
-    private String nombre;
-    private String apellido;
+    private String firstname;
+    private String lastname;
     private LocalDate fechaNacimiento;
-    private int codigoPaisTelefono;
-    private long telefono;
-    private String pais;
+    private int phoneCode;
+    private long phone;
+    private String country;
     private ArrayList<Vuelo> vuelos;
 
-    public Pasajero(long id, String nombre, String apellido, LocalDate fechaNacimiento, int codigoPaisTelefono, long telefono, String pais) {
+    public Pasajero(long id, String firstname, String lastname, LocalDate fechaNacimiento, int phoneCode, long phone, String country) {
         this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.fechaNacimiento = fechaNacimiento;
-        this.codigoPaisTelefono = codigoPaisTelefono;
-        this.telefono = telefono;
-        this.pais = pais;
+        this.phoneCode = phoneCode;
+        this.phone = phone;
+        this.country = country;
         this.vuelos = new ArrayList<>();
     }
 
@@ -39,11 +39,11 @@ public class Pasajero implements Cloneable{
     }
 
     public String getNombre() {
-        return nombre;
+        return firstname;
     }
 
     public String getApellido() {
-        return apellido;
+        return lastname;
     }
 
     public LocalDate getFechaNacimiento() {
@@ -51,15 +51,15 @@ public class Pasajero implements Cloneable{
     }
 
     public int getCodigoPaisTelefono() {
-        return codigoPaisTelefono;
+        return phoneCode;
     }
 
     public long getTelefono() {
-        return telefono;
+        return phone;
     }
 
     public String getPais() {
-        return pais;
+        return country;
     }
 
     public ArrayList<Vuelo> getVuelos() {
