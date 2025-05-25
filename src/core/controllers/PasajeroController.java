@@ -5,6 +5,7 @@
 package core.controllers;
 
 import core.controllers.utils.Response;
+import core.models.Pasajero;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -44,19 +45,19 @@ public class PasajeroController {
     }
 
     public Response<ArrayList<Pasajero>> obtenerPasajerosOrdenados() {
-        ArrayList<Pasajero> pasajeros = new ArrayList<>(servicio.obtenerTodosOrdenadosPorId());
-        ArrayList<Pasajero> copia = pasajeros.stream().map(Pasajero::clonar)
-                .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Pasajero> pasajeros = servicio.obtenerTodosOrdenadosPorId();
+        ArrayList<Pasajero> copia = pasajeros.stream().map(Pasajero::clonar).collect(Collectors.toCollection(ArrayList::new));
         return new Response<>(200, "Pasajeros obtenidos", copia);
     }
 
     private boolean validarPasajero(Pasajero p) {
         if (p == null) return false;
         if (p.getId() < 0 || String.valueOf(p.getId()).length() > 15) return false;
-        if (p.getNombre() == null || p.getNombre().isEmpty()) return false;
+        if (p.getNombre() == null || p.getNombre().trim().isEmpty()) return false;
         if (p.getCodigoTelefono() < 0 || String.valueOf(p.getCodigoTelefono()).length() > 3) return false;
         if (p.getTelefono() < 0 || String.valueOf(p.getTelefono()).length() > 11) return false;
-        return p.getFechaNacimiento() != null;
+        if (p.getFechaNacimiento() == null) return false;
+        return true;
     }
 }
 
