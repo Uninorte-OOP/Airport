@@ -7,6 +7,7 @@ package core.controllers;
 import core.controllers.utils.Response;
 import core.models.Pasajero;
 import core.services.ServicioPasajeros;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -34,11 +35,11 @@ public class PasajeroController {
         if (!validarPasajero(pasajero)) {
             return new Response<>(400, "Datos inválidos", null);
         }
-        if (servicio.existe(pasajero.getId())) {
+        if (servicio.existePasajero(pasajero.getId())) {
             return new Response<>(409, "ID de pasajero ya existe", null);
         }
-        Pasajero copia = pasajero.clonar();
-        servicio.registrar(copia);
+        Pasajero copia = pasajero.clone();
+        servicio.registrarPasajero(copia);
         return new Response<>(201, "Pasajero registrado", copia);
     }
 
@@ -46,17 +47,17 @@ public class PasajeroController {
         if (!validarPasajero(pasajero)) {
             return new Response<>(400, "Datos inválidos", null);
         }
-        if (!servicio.existe(pasajero.getId())) {
+        if (!servicio.existePasajero(pasajero.getId())) {
             return new Response<>(404, "Pasajero no encontrado", null);
         }
-        Pasajero copia = pasajero.clonar();
-        servicio.actualizar(copia);
+        Pasajero copia = pasajero.clone();
+        servicio.actualizarPasajero(copia);
         return new Response<>(200, "Pasajero actualizado", copia);
     }
 
     public Response<ArrayList<Pasajero>> obtenerPasajerosOrdenados() {
-        ArrayList<Pasajero> pasajeros = servicio.obtenerTodosOrdenadosPorId();
-        ArrayList<Pasajero> copia = pasajeros.stream().map(Pasajero::clonar).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Pasajero> pasajeros = servicio.obtenerPasajerosOrdenadosPorId();
+        ArrayList<Pasajero> copia = pasajeros.stream().map(Pasajero::clone).collect(Collectors.toCollection(ArrayList::new));
         return new Response<>(200, "Pasajeros obtenidos", copia);
     }
 
@@ -66,7 +67,7 @@ public class PasajeroController {
         if (p.getNombre() == null || p.getNombre().trim().isEmpty()) return false;
         if (p.getCodigoPaisTelefono() < 0 || String.valueOf(p.getCodigoPaisTelefono()).length() > 3) return false;
         if (p.getTelefono() < 0 || String.valueOf(p.getTelefono()).length() > 11) return false;
-        if (p.getFechaNacimiento() == null) return false;
+        if (p.getFechaNacimiento() == null || p.getFechaNacimiento().isAfter(LocalDate.now())) return false;
         return true;
     }
 }

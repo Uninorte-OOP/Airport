@@ -20,6 +20,7 @@ import core.controllers.PasajeroController;
 import core.controllers.utils.Response;
 import core.models.Pasajero;
 import core.controllers.utils.Status;
+import core.models.storage.BaseDatosSimulada;
 import core.services.ServicioPasajeros;
 
 /**
@@ -1538,39 +1539,57 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_Flight_Registration_ActionPerformed
 
     private void btn_Update_Info_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Update_Info_ActionPerformed
-    long id = Long.parseLong(txt_ID_Update_.getText());
-    String firstname = txt_First_Name_Update_.getText();
-    String lastname = txt_Last_Name_Update_.getText();
-    LocalDate birthDate = LocalDate.of(
-    Integer.parseInt(txt_Birthdate_Update_.getText()),
-    Integer.parseInt(MONTH.getItemAt(MONTH5.getSelectedIndex())),
-    Integer.parseInt(DAY.getItemAt(DAY5.getSelectedIndex()))
-    );
-    int phoneCode = Integer.parseInt(txt_Codigo_de_Pais_Update_.getText());
-    long phone = Long.parseLong(txt_Numero_de_Telefono_Update_.getText());
-    String country = txt_Country_Update_.getText();
+    try {
+        // 1. Recoger datos del formulario
+        long id = Long.parseLong(txt_ID_Update_.getText());
+        String nombre = txt_First_Name_Update_.getText();
+        String apellido = txt_Last_Name_Update_.getText();
+        LocalDate fechaNacimiento = LocalDate.of(
+            Integer.parseInt(txt_Birthdate_Update_.getText()),
+            MONTH5.getSelectedIndex() + 1, // Ajuste para meses 1-12
+            DAY5.getSelectedIndex() + 1    // Ajuste para días 1-31
+        );
+        int codigoPais = Integer.parseInt(txt_Codigo_de_Pais_Update_.getText());
+        long telefono = Long.parseLong(txt_Numero_de_Telefono_Update_.getText());
+        String pais = txt_Country_Update_.getText();
 
-    Pasajero pasajero = new Pasajero(id, firstname, lastname, birthDate, phoneCode, phone, country);
-   // 3. Obtén la instancia del controlador (usa getInstance)
-    ServicioPasajeros servicio = new ServicioPasajeros();
-    PasajeroController controller = PasajeroController.getInstance(servicio);
-    Response<Pasajero> response = controller.actualizarPasajero(pasajero);
+        // 2. Crear objeto Pasajero
+        Pasajero pasajero = new Pasajero(id, nombre, apellido, fechaNacimiento, codigoPais, telefono, pais);
 
-    if (response.getCodigo() >= 200 && response.getCodigo() < 300) {
-        JOptionPane.showMessageDialog(null, response.getMensaje(), "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-        txt_ID_Update_.setText("");
-        txt_First_Name_Update_.setText("");
-        txt_Last_Name_Update_.setText("");
-        txt_Birthdate_Update_.setText("");
-        txt_Codigo_de_Pais_Update_.setText("");
-        txt_Numero_de_Telefono_Update_.setText("");
-        txt_Country_Update_.setText("");
-    } else {
+        // 3. Obtener instancia del controlador (Singleton)
+        BaseDatosSimulada baseDatos = new BaseDatosSimulada(); // O inyectarla si ya existe
+        ServicioPasajeros servicio = new ServicioPasajeros(baseDatos);
+        PasajeroController controller = PasajeroController.getInstance(servicio);
+
+        // 4. Llamar al controlador
+        Response<Pasajero> response = controller.actualizarPasajero(pasajero);
+
+        // 5. Manejar respuesta
+        if (response.getCodigo() == 200) {
+            JOptionPane.showMessageDialog(null, 
+                response.getMensaje(), 
+                "Actualización Exitosa", 
+                JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                response.getMensaje(), 
+                "Error " + response.getCodigo(), 
+                response.getCodigo() >= 500 ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+        }
+    } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(null, 
-            response.getMensaje(), 
-            "Error " + response.getCodigo(), 
-            response.getCodigo() >= 500 ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+            "Formato numérico inválido en los campos", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(null, 
+            e.getMessage(), 
+            "Error de datos", 
+            JOptionPane.WARNING_MESSAGE);
     }
+
+    
         //passenger.setFirstname(firstname);
         //passenger.setLastname(lastname);
         //passenger.setBirthDate(birthDate);
@@ -1578,7 +1597,17 @@ public class AirportFrame extends javax.swing.JFrame {
         //passenger.setPhone(phone);
         //passenger.setCountry(country);
     }//GEN-LAST:event_btn_Update_Info_ActionPerformed
-
+    
+    private void limpiarCampos() {
+        txt_ID_Update_.setText("");
+        txt_First_Name_Update_.setText("");
+        txt_Last_Name_Update_.setText("");
+        txt_Birthdate_Update_.setText("");
+        txt_Codigo_de_Pais_Update_.setText("");
+        txt_Numero_de_Telefono_Update_.setText("");
+        txt_Country_Update_.setText("");
+    
+    }
     private void btn_Add_Passenger_Flight_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Add_Passenger_Flight_ActionPerformed
         // TODO add your handling code here:
         long passengerId = Long.parseLong(jTextField28.getText());
