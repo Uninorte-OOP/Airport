@@ -9,6 +9,7 @@ import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import com.formdev.flatlaf.FlatDarkLaf;
+import core.controllers.AeropuertoController;
 import core.controllers.AvionController;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -18,13 +19,18 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import core.controllers.PasajeroController;
+import core.controllers.VueloController;
 import core.controllers.utils.Response;
 import core.models.Pasajero;
 import core.controllers.utils.Status;
 import core.models.Avion;
+import core.models.Ubicacion;
+import core.models.Vuelo;
 import core.models.storage.BaseDatosSimulada;
+import core.services.ServicioAeropuertos;
 import core.services.ServicioAviones;
 import core.services.ServicioPasajeros;
+import core.services.ServicioVuelos;
 import java.time.DateTimeException;
 
 /**
@@ -114,7 +120,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
         panelRound1 = new airport.PanelRound();
         panelRound2 = new airport.PanelRound();
-        jButton13 = new javax.swing.JButton();
+        btn_Exit_ = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         user = new javax.swing.JRadioButton();
@@ -269,14 +275,14 @@ public class AirportFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jButton13.setText("X");
-        jButton13.setBorderPainted(false);
-        jButton13.setContentAreaFilled(false);
-        jButton13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        btn_Exit_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        btn_Exit_.setText("X");
+        btn_Exit_.setBorderPainted(false);
+        btn_Exit_.setContentAreaFilled(false);
+        btn_Exit_.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Exit_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                btn_Exit_ActionPerformed(evt);
             }
         });
 
@@ -286,13 +292,13 @@ public class AirportFrame extends javax.swing.JFrame {
             panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound2Layout.createSequentialGroup()
                 .addContainerGap(1083, Short.MAX_VALUE)
-                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Exit_, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
         panelRound2Layout.setVerticalGroup(
             panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound2Layout.createSequentialGroup()
-                .addComponent(jButton13)
+                .addComponent(btn_Exit_)
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
@@ -1445,8 +1451,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btn_Passenger_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Passenger_Registration_ActionPerformed
         try {
-        // 1. Recolectar datos del formulario (conversión básica)
-        long id = Long.parseLong(txt_ID_Passenger_Registration_.getText());
+        Long id = Long.parseLong(txt_ID_Passenger_Registration_.getText());
         String nombre = txt_First_Name__Passenger_Registration_.getText();
         String apellido = txt_Last_Name_Passenger_Registartion_.getText();
         int año = Integer.parseInt(txt_Birthdate_Passenger_Registration_.getText());
@@ -1495,29 +1500,20 @@ public class AirportFrame extends javax.swing.JFrame {
     private void btn_Airplane_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Airplane_Registration_ActionPerformed
         // TODO add your handling code here:
         try {
-        // 1. Recolectar datos del formulario
-        long id = Long.parseLong(txt_ID_Airplane_Registration_.getText());
+        String id = txt_ID_Airplane_Registration_.getText();
         String marca = txt_Brand_Airplane_Registration_.getText();
         String modelo = txt_Model_Airplane_Registration_.getText();
         int capacidadMaxima = Integer.parseInt(txt_Max_Capacity_Airplane_Registration_.getText());
         String aerolinea = txt_Airline_Airplane_Registration_.getText();
-
-        // 2. Crear objeto Avion
         Avion nuevoAvion = new Avion(id, marca, modelo, capacidadMaxima, aerolinea);
-
-        // 3. Obtener controlador (similar al de pasajeros)
         AvionController controller = AvionController.getInstance(
             new ServicioAviones(BaseDatosSimulada.getInstance())
         );
-
-        // 4. Registrar avión
         Response<Avion> response = controller.registrarAvion(nuevoAvion);
-
-        // 5. Manejar respuesta
         if (response.getCodigo() == 201) { 
             JOptionPane.showMessageDialog(this, "Avión registrado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             limpiarCamposAvion();
-            //cmb_Plane_Flight_Registration_.addItem(id); // Actualizar combobox
+            cmb_Plane_Flight_Registration_.addItem(id); 
         } else {
             JOptionPane.showMessageDialog(this, response.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1539,70 +1535,145 @@ public class AirportFrame extends javax.swing.JFrame {
     
     private void btn_Location_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Location_Registration_ActionPerformed
         // TODO add your handling code here:
-        String id = txt_Airport_ID_Location_Registration_.getText();
-        String name = txt_Airport_Name_Location_Registration_.getText();
-        String city = txt_Airport_City_Location_Registration_.getText();
-        String country = txt_Airport_Country_Location_Registration_.getText();
-        double latitude = Double.parseDouble(txt_Airport_Latitude_Location_Registration_.getText());
-        double longitude = Double.parseDouble(txt_Airport_Longitude_Location_Registration_.getText());
+        try {
+        Ubicacion nuevaUbicacion = new Ubicacion(
+            txt_Airport_ID_Location_Registration_.getText().trim(),
+            txt_Airport_Name_Location_Registration_.getText().trim(),
+            txt_Airport_City_Location_Registration_.getText().trim(),
+            txt_Airport_Country_Location_Registration_.getText().trim(),
+            Double.parseDouble(txt_Airport_Latitude_Location_Registration_.getText().trim()),
+            Double.parseDouble(txt_Airport_Longitude_Location_Registration_.getText().trim())
+        );
+        AeropuertoController controller = AeropuertoController.getInstance(
+            new ServicioAeropuertos(BaseDatosSimulada.getInstance())
+        );
 
-        this.locations.add(new Location(id, name, city, country, latitude, longitude));
+        Response<Ubicacion> response = controller.crearAeropuerto(nuevaUbicacion);
+        
+        if (response.getCodigo() == 201) {
+            JOptionPane.showMessageDialog(this, "Aeropuerto registrado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+            String id = nuevaUbicacion.getIdAeropuerto();
+            cmb_Departure_Location_Flight_Registration_.addItem(id);
+            cmb_Arrive_Location_Flight_Registration_.addItem(id);
+            cmb_Scale_Location_Flight_Registration_.addItem(id);
+            limpiarCamposUbicacion();
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
-        this.cmb_Departure_Location_Flight_Registration_.addItem(id);
-        this.cmb_Arrive_Location_Flight_Registration_.addItem(id);
-        this.cmb_Scale_Location_Flight_Registration_.addItem(id);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Latitud y Longitud deben ser valores numéricos", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_Location_Registration_ActionPerformed
-
+    
+    private void limpiarCamposUbicacion() {
+    txt_Airport_ID_Location_Registration_.setText("");
+    txt_Airport_Name_Location_Registration_.setText("");
+    txt_Airport_City_Location_Registration_.setText("");
+    txt_Airport_Country_Location_Registration_.setText("");
+    txt_Airport_Latitude_Location_Registration_.setText("");
+    txt_Airport_Longitude_Location_Registration_.setText("");
+}
+    
     private void btn_Flight_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Flight_Registration_ActionPerformed
         // TODO add your handling code here:
-        String id = txt_ID_Flight_Registration_.getText();
-        String planeId = cmb_Plane_Flight_Registration_.getItemAt(cmb_Plane_Flight_Registration_.getSelectedIndex());
-        String departureLocationId = cmb_Departure_Location_Flight_Registration_.getItemAt(cmb_Departure_Location_Flight_Registration_.getSelectedIndex());
-        String arrivalLocationId = cmb_Arrive_Location_Flight_Registration_.getItemAt(cmb_Arrive_Location_Flight_Registration_.getSelectedIndex());
-        String scaleLocationId = cmb_Scale_Location_Flight_Registration_.getItemAt(cmb_Scale_Location_Flight_Registration_.getSelectedIndex());
-        int year = Integer.parseInt(txt_Año_Departure_Date_Flight_Registration_.getText());
-        int month = Integer.parseInt(cmb_Month_Departure_Date_Flight_Registration_.getItemAt(cmb_Month_Departure_Date_Flight_Registration_.getSelectedIndex()));
-        int day = Integer.parseInt(cmb_Day_Departure_Date_Flight_Registration_.getItemAt(cmb_Day_Departure_Date_Flight_Registration_.getSelectedIndex()));
-        int hour = Integer.parseInt(cmb_Hour_Departure_Date_Flight_Registration_.getItemAt(cmb_Hour_Departure_Date_Flight_Registration_.getSelectedIndex()));
-        int minutes = Integer.parseInt(cmb_Minute_Departure_Date_Flight_Registration_.getItemAt(cmb_Minute_Departure_Date_Flight_Registration_.getSelectedIndex()));
-        int hoursDurationsArrival = Integer.parseInt(cmb_Hour_Duration_Flight_Registration_.getItemAt(cmb_Hour_Duration_Flight_Registration_.getSelectedIndex()));
-        int minutesDurationsArrival = Integer.parseInt(cmb_Minute_Duration_Flight_Registration_.getItemAt(cmb_Minute_Duration_Flight_Registration_.getSelectedIndex()));
-        int hoursDurationsScale = Integer.parseInt(MONTH4.getItemAt(MONTH4.getSelectedIndex()));
-        int minutesDurationsScale = Integer.parseInt(DAY4.getItemAt(DAY4.getSelectedIndex()));
+        try {
+        ServicioAviones servicioAviones = new ServicioAviones(BaseDatosSimulada.getInstance());
+        ServicioAeropuertos servicioAeropuertos = new ServicioAeropuertos(BaseDatosSimulada.getInstance());
 
-        LocalDateTime departureDate = LocalDateTime.of(year, month, day, hour, minutes);
-
-        Plane plane = null;
-        for (Plane p : this.planes) {
-            if (planeId.equals(p.getId())) {
-                plane = p;
-            }
+        String id = txt_ID_Flight_Registration_.getText().trim();
+        
+        String planeId = cmb_Plane_Flight_Registration_.getItemAt(cmb_Plane_Flight_Registration_.getSelectedIndex()).toString();
+        Avion avion = servicioAviones.obtenerAvion(planeId);
+        if (avion == null) {
+            throw new Exception("Avión no encontrado");
         }
-
-        Location departure = null;
-        Location arrival = null;
-        Location scale = null;
-        for (Location location : this.locations) {
-            if (departureLocationId.equals(location.getAirportId())) {
-                departure = location;
-            }
-            if (arrivalLocationId.equals(location.getAirportId())) {
-                arrival = location;
-            }
-            if (scaleLocationId.equals(location.getAirportId())) {
-                scale = location;
-            }
+        
+        String departureId = cmb_Departure_Location_Flight_Registration_.getItemAt(cmb_Departure_Location_Flight_Registration_.getSelectedIndex()).toString();
+        Ubicacion salida = servicioAeropuertos.obtenerAeropuerto(departureId);
+        if (salida == null) {
+            throw new Exception("Ubicación de salida no encontrada");
         }
+        
+        String arrivalId = cmb_Arrive_Location_Flight_Registration_.getItemAt(cmb_Arrive_Location_Flight_Registration_.getSelectedIndex()).toString();
+        Ubicacion llegada = servicioAeropuertos.obtenerAeropuerto(arrivalId);
+        if (llegada == null) {
+            throw new Exception("Ubicación de llegada no encontrada");
+        }
+        
+        
+        LocalDateTime departureDate = LocalDateTime.of(
+            Integer.parseInt(txt_Año_Departure_Date_Flight_Registration_.getText()),
+            cmb_Month_Departure_Date_Flight_Registration_.getSelectedIndex() + 1,
+            Integer.parseInt(cmb_Day_Departure_Date_Flight_Registration_.getItemAt(cmb_Day_Departure_Date_Flight_Registration_.getSelectedIndex())),
+            Integer.parseInt(cmb_Hour_Departure_Date_Flight_Registration_.getItemAt(cmb_Hour_Departure_Date_Flight_Registration_.getSelectedIndex())),
+            Integer.parseInt(cmb_Minute_Departure_Date_Flight_Registration_.getItemAt(cmb_Minute_Departure_Date_Flight_Registration_.getSelectedIndex()))
+        );
 
-        if (scale == null) {
-            this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
+        int arrivalHours = Integer.parseInt(cmb_Hour_Duration_Flight_Registration_.getItemAt(cmb_Hour_Duration_Flight_Registration_.getSelectedIndex()));
+        int arrivalMinutes = Integer.parseInt(cmb_Minute_Duration_Flight_Registration_.getItemAt(cmb_Minute_Duration_Flight_Registration_.getSelectedIndex()));
+
+
+        Vuelo nuevoVuelo;
+        if (cmb_Scale_Location_Flight_Registration_.getSelectedIndex() >= 0) {
+            String scaleId = cmb_Scale_Location_Flight_Registration_.getItemAt(cmb_Scale_Location_Flight_Registration_.getSelectedIndex()).toString();
+            Ubicacion escala = servicioAeropuertos.obtenerAeropuerto(scaleId);
+            if (escala == null) {
+                throw new Exception("Ubicación de escala no encontrada");
+            }
+            
+            int scaleHours = Integer.parseInt(MONTH4.getItemAt(MONTH4.getSelectedIndex()));
+            int scaleMinutes = Integer.parseInt(DAY4.getItemAt(DAY4.getSelectedIndex()));
+            
+            nuevoVuelo = new Vuelo(id, avion, salida, escala, llegada, departureDate, arrivalHours, arrivalMinutes, scaleHours, scaleMinutes);
         } else {
-            this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale));
+            nuevoVuelo = new Vuelo(id, avion, salida, llegada, departureDate, arrivalHours, arrivalMinutes);
         }
 
-        this.cmb_Flight_Add_to_Flight_.addItem(id);
-    }//GEN-LAST:event_btn_Flight_Registration_ActionPerformed
+        VueloController controller = new VueloController(
+            new ServicioVuelos(BaseDatosSimulada.getInstance()),
+            servicioAviones, 
+            servicioAeropuertos, 
+            new ServicioPasajeros(BaseDatosSimulada.getInstance())
+        );
+        
+        Response<Vuelo> response = controller.crearVuelo(nuevoVuelo);
+        
+        if (response.getCodigo() == 201) {
+            JOptionPane.showMessageDialog(this, "Vuelo registrado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cmb_Flight_Add_to_Flight_.addItem(id);
+            limpiarFormularioVuelo();
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Verifique los campos numéricos", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_Flight_Registration_ActionPerformed
+    
+    private void limpiarFormularioVuelo() {
+    txt_ID_Flight_Registration_.setText("");
+    cmb_Plane_Flight_Registration_.setSelectedIndex(-1);
+    cmb_Departure_Location_Flight_Registration_.setSelectedIndex(-1);
+    cmb_Arrive_Location_Flight_Registration_.setSelectedIndex(-1);
+    cmb_Scale_Location_Flight_Registration_.setSelectedIndex(-1);
+    txt_Año_Departure_Date_Flight_Registration_.setText("");
+    cmb_Month_Departure_Date_Flight_Registration_.setSelectedIndex(0);
+    cmb_Day_Departure_Date_Flight_Registration_.setSelectedIndex(0);
+    cmb_Hour_Departure_Date_Flight_Registration_.setSelectedIndex(0);
+    cmb_Minute_Departure_Date_Flight_Registration_.setSelectedIndex(0);
+    cmb_Hour_Duration_Flight_Registration_.setSelectedIndex(0);
+    cmb_Minute_Duration_Flight_Registration_.setSelectedIndex(0);
+    MONTH4.setSelectedIndex(0);
+    DAY4.setSelectedIndex(0);
+}
+    
     private void btn_Update_Info_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Update_Info_ActionPerformed
     try {
         long id = Long.parseLong(txt_ID_Update_.getText());
@@ -1791,20 +1862,13 @@ public class AirportFrame extends javax.swing.JFrame {
             model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
         }*/
         try {
-        // 1. Obtener instancia del controlador (igual que con pasajeros)
         AvionController controller = AvionController.getInstance(
             new ServicioAviones(BaseDatosSimulada.getInstance())
         );
-        
-        // 2. Obtener la lista de aviones ordenados
         Response<ArrayList<Avion>> response = controller.obtenerAvionesOrdenados();
-        
-        // 3. Verificar respuesta exitosa
         if (response.getCodigo() == 200) {
             DefaultTableModel model = (DefaultTableModel) tbl_Lista_Aviones_Show_all_Planes_.getModel();
-            model.setRowCount(0); // Limpiar tabla
-            
-            // 4. Llenar la tabla con los datos
+            model.setRowCount(0);
             for (Avion avion : response.getDatos()) {
                 model.addRow(new Object[]{
                     avion.getId(),
@@ -1812,7 +1876,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     avion.getModelo(),
                     avion.getCapacidadMaxima(),
                     avion.getAerolinea(),
-                    avion.getVuelos().size() // Número de vuelos
+                    avion.getVuelos().size() 
                 });
             }
         } else {
@@ -1831,16 +1895,46 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btn_Refresh_All_Locations_List_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Refresh_All_Locations_List_ActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tbl_Ubicaciones_Show_all_Locations_.getModel();
+        /*DefaultTableModel model = (DefaultTableModel) tbl_Ubicaciones_Show_all_Locations_.getModel();
         model.setRowCount(0);
         for (Location location : this.locations) {
             model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
+        }*/
+        try {
+        AeropuertoController controller = AeropuertoController.getInstance(
+            new ServicioAeropuertos(BaseDatosSimulada.getInstance())
+        );
+        Response<ArrayList<Ubicacion>> response = controller.obtenerAeropuertosOrdenados();
+        if (response.getCodigo() == 200) {
+            DefaultTableModel model = (DefaultTableModel) tbl_Ubicaciones_Show_all_Locations_.getModel();
+            model.setRowCount(0); 
+            for (Ubicacion ubicacion : response.getDatos()) {
+                model.addRow(new Object[]{
+                    ubicacion.getIdAeropuerto(),
+                    ubicacion.getNombreAeropuerto(),
+                    ubicacion.getCiudad(),
+                    ubicacion.getPais(),
+                    ubicacion.getLatitud(),
+                    ubicacion.getLongitud()
+                });
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar ubicaciones: " + response.getMensaje(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error crítico: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_Refresh_All_Locations_List_ActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void btn_Exit_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Exit_ActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_btn_Exit_ActionPerformed
 
     private void userSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userSelectActionPerformed
         try {
@@ -1885,6 +1979,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JButton btn_Add_Passenger_Flight_;
     private javax.swing.JButton btn_Airplane_Registration_;
     private javax.swing.JButton btn_Delay_Flight_;
+    private javax.swing.JButton btn_Exit_;
     private javax.swing.JButton btn_Flight_Registration_;
     private javax.swing.JButton btn_Location_Registration_;
     private javax.swing.JButton btn_Passenger_Registration_;
@@ -1910,7 +2005,6 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmb_Month_Departure_Date_Flight_Registration_;
     private javax.swing.JComboBox<String> cmb_Plane_Flight_Registration_;
     private javax.swing.JComboBox<String> cmb_Scale_Location_Flight_Registration_;
-    private javax.swing.JButton jButton13;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel30;

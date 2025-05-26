@@ -51,12 +51,12 @@ public class AvionController {
 
     private boolean validarAvion(Avion a) {
         if (a == null) return false;
-        if (a.getId() < 0 || String.valueOf(a.getId()).length() > 15) return false; //if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
+        if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
         if (a.getModelo() == null || a.getModelo().trim().isEmpty()) return false;
         if (a.getMarca() == null || a.getMarca().trim().isEmpty()) return false;
         if (a.getCapacidadMaxima() <= 0) return false; // Suponiendo que el avión debe tener al menos una plaza
         if (a == null) return false;
-        if (a.getId() < 0 || String.valueOf(a.getId()).length() > 15) return false; //if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
+        if (!a.getId().matches("[A-Z]{2}\\d{5}")) return false;
         if (a.getModelo() == null || a.getModelo().trim().isEmpty()) return false;
         if (a.getMarca() == null || a.getMarca().trim().isEmpty()) return false;
         if (a.getCapacidadMaxima() <= 0 || a.getCapacidadMaxima() > 1000) return false;
