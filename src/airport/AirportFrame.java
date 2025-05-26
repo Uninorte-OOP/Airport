@@ -64,6 +64,11 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
     }
 
     @Override
+    public void showError(String message) {
+        javax.swing.JOptionPane.showMessageDialog(this, message, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
     public void updatePassengerLists(ArrayList<Passenger> passengers) {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
