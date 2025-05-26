@@ -9,6 +9,7 @@ import airport.Location;
 import airport.Passenger;
 import airport.Plane;
 import com.formdev.flatlaf.FlatDarkLaf;
+import core.controllers.AvionController;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +21,9 @@ import core.controllers.PasajeroController;
 import core.controllers.utils.Response;
 import core.models.Pasajero;
 import core.controllers.utils.Status;
+import core.models.Avion;
 import core.models.storage.BaseDatosSimulada;
+import core.services.ServicioAviones;
 import core.services.ServicioPasajeros;
 import java.time.DateTimeException;
 
@@ -67,7 +70,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }
 
     private void generateMonths() {
-        for (int i = 1; i < 13; i++) {
+        for (int i = 0; i < 13; i++) {
             cmb_Month_Birthdate_Passenger_Registration_.addItem("" + i);
             cmb_Month_Departure_Date_Flight_Registration_.addItem("" + i);
             MONTH5.addItem("" + i);
@@ -140,14 +143,14 @@ public class AirportFrame extends javax.swing.JFrame {
         btn_Passenger_Registration_ = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lbl_ID_Airplane_Registration_ = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        txt_ID_Airplane_Registration_ = new javax.swing.JTextField();
         lbl_Brand_Airplane_Registration_ = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        txt_Brand_Airplane_Registration_ = new javax.swing.JTextField();
+        txt_Model_Airplane_Registration_ = new javax.swing.JTextField();
         lbl_Model_Airplane_Registration_ = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        txt_Max_Capacity_Airplane_Registration_ = new javax.swing.JTextField();
         lbl_Max_Capacity_Airplane_Registration_ = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        txt_Airline_Airplane_Registration_ = new javax.swing.JTextField();
         lbl_Airline_Airplane_Registration_ = new javax.swing.JLabel();
         btn_Airplane_Registration_ = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
@@ -417,40 +420,40 @@ public class AirportFrame extends javax.swing.JFrame {
         jPanel3.add(lbl_ID_Airplane_Registration_);
         lbl_ID_Airplane_Registration_.setBounds(53, 96, 22, 25);
 
-        jTextField8.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jPanel3.add(jTextField8);
-        jTextField8.setBounds(180, 93, 130, 31);
+        txt_ID_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jPanel3.add(txt_ID_Airplane_Registration_);
+        txt_ID_Airplane_Registration_.setBounds(180, 93, 130, 31);
 
         lbl_Brand_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         lbl_Brand_Airplane_Registration_.setText("Brand:");
         jPanel3.add(lbl_Brand_Airplane_Registration_);
         lbl_Brand_Airplane_Registration_.setBounds(53, 157, 50, 25);
 
-        jTextField9.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jPanel3.add(jTextField9);
-        jTextField9.setBounds(180, 154, 130, 31);
+        txt_Brand_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jPanel3.add(txt_Brand_Airplane_Registration_);
+        txt_Brand_Airplane_Registration_.setBounds(180, 154, 130, 31);
 
-        jTextField10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jPanel3.add(jTextField10);
-        jTextField10.setBounds(180, 213, 130, 31);
+        txt_Model_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jPanel3.add(txt_Model_Airplane_Registration_);
+        txt_Model_Airplane_Registration_.setBounds(180, 213, 130, 31);
 
         lbl_Model_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         lbl_Model_Airplane_Registration_.setText("Model:");
         jPanel3.add(lbl_Model_Airplane_Registration_);
         lbl_Model_Airplane_Registration_.setBounds(53, 216, 55, 25);
 
-        jTextField11.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jPanel3.add(jTextField11);
-        jTextField11.setBounds(180, 273, 130, 31);
+        txt_Max_Capacity_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jPanel3.add(txt_Max_Capacity_Airplane_Registration_);
+        txt_Max_Capacity_Airplane_Registration_.setBounds(180, 273, 130, 31);
 
         lbl_Max_Capacity_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         lbl_Max_Capacity_Airplane_Registration_.setText("Max Capacity:");
         jPanel3.add(lbl_Max_Capacity_Airplane_Registration_);
         lbl_Max_Capacity_Airplane_Registration_.setBounds(53, 276, 109, 25);
 
-        jTextField12.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jPanel3.add(jTextField12);
-        jTextField12.setBounds(180, 333, 130, 31);
+        txt_Airline_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jPanel3.add(txt_Airline_Airplane_Registration_);
+        txt_Airline_Airplane_Registration_.setBounds(180, 333, 130, 31);
 
         lbl_Airline_Airplane_Registration_.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         lbl_Airline_Airplane_Registration_.setText("Airline:");
@@ -899,7 +902,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(507, 507, 507)
                         .addComponent(btn_Update_Info_)))
-                .addContainerGap(555, Short.MAX_VALUE))
+                .addContainerGap(586, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -973,7 +976,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmb_Flight_Add_to_Flight_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_ID_Add_to_Flight_, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(829, Short.MAX_VALUE))
+                .addContainerGap(860, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Add_Passenger_Flight_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1043,7 +1046,7 @@ public class AirportFrame extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(269, 269, 269)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(291, Short.MAX_VALUE))
+                .addContainerGap(322, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Refresh_My_Flights_)
@@ -1107,7 +1110,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1078, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1167,7 +1170,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(521, 521, 521)
                         .addComponent(btn_Refresh_All_Flights_List_)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1226,7 +1229,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(145, 145, 145)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1285,7 +1288,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(226, 226, 226)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addContainerGap(303, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1342,7 +1345,7 @@ public class AirportFrame extends javax.swing.JFrame {
                             .addComponent(lbl_Hours_Delay_Flight_))
                         .addGap(79, 79, 79)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmb_Hour_Delay_Flight_, 0, 105, Short.MAX_VALUE)
+                            .addComponent(cmb_Hour_Delay_Flight_, 0, 136, Short.MAX_VALUE)
                             .addComponent(cmb_ID_Delay_Flight_, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(820, 820, 820))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
@@ -1447,38 +1450,34 @@ public class AirportFrame extends javax.swing.JFrame {
         String nombre = txt_First_Name__Passenger_Registration_.getText();
         String apellido = txt_Last_Name_Passenger_Registartion_.getText();
         int año = Integer.parseInt(txt_Birthdate_Passenger_Registration_.getText());
-        int mes = cmb_Month_Birthdate_Passenger_Registration_.getSelectedIndex() - 1; // Ajuste a 1-12
+        int mes = cmb_Month_Birthdate_Passenger_Registration_.getSelectedIndex() - 1; 
         int dia = Integer.parseInt(cmb_Day_Birthdate_Passenger_Registration_.getItemAt(cmb_Day_Birthdate_Passenger_Registration_.getSelectedIndex()));
         int codigoPais = Integer.parseInt(txt_Phone_Code_Passenger_Registration_.getText());
         long telefono = Long.parseLong(txt_Phone_Passenger_Registration_.getText());
         String pais = txt_Country_Passenger_Registration_.getText();
 
-        // 2. Crear objeto Pasajero (la validación fuerte la hará el controlador)
         LocalDate fechaNacimiento = LocalDate.of(año, mes, dia);
         Pasajero nuevoPasajero = new Pasajero(id, nombre, apellido, fechaNacimiento, codigoPais, telefono, pais);
 
-        // 3. Obtener controlador (Singleton)
         PasajeroController controller = PasajeroController.getInstance(
             new ServicioPasajeros(BaseDatosSimulada.getInstance())
         );
 
-        // 4. Llamar al controlador
         Response<Pasajero> response = controller.registrarPasajero(nuevoPasajero);
 
-        // 5. Manejar respuesta
-        if (response.getCodigo() == 201) { // Código 201 = Created
+        if (response.getCodigo() == 201) { 
             JOptionPane.showMessageDialog(null, "Pasajero registrado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             limpiarCamposRegistro();
-            userSelect.addItem(String.valueOf(id)); // Actualizar JComboBox
+            userSelect.addItem(String.valueOf(id)); 
         } else {
             JOptionPane.showMessageDialog(null, response.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Verifique los campos numéricos (ID, teléfono, código)", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (DateTimeException e) {
-        JOptionPane.showMessageDialog(null, "Fecha inválida", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Verifique los campos numéricos (ID, teléfono, código)", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (DateTimeException e) {
+            JOptionPane.showMessageDialog(null, "Fecha inválida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_Passenger_Registration_ActionPerformed
     
     private void limpiarCamposRegistro() {
@@ -1495,17 +1494,49 @@ public class AirportFrame extends javax.swing.JFrame {
     
     private void btn_Airplane_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Airplane_Registration_ActionPerformed
         // TODO add your handling code here:
-        String id = jTextField8.getText();
-        String brand = jTextField9.getText();
-        String model = jTextField10.getText();
-        int maxCapacity = Integer.parseInt(jTextField11.getText());
-        String airline = jTextField12.getText();
+        try {
+        // 1. Recolectar datos del formulario
+        long id = Long.parseLong(txt_ID_Airplane_Registration_.getText());
+        String marca = txt_Brand_Airplane_Registration_.getText();
+        String modelo = txt_Model_Airplane_Registration_.getText();
+        int capacidadMaxima = Integer.parseInt(txt_Max_Capacity_Airplane_Registration_.getText());
+        String aerolinea = txt_Airline_Airplane_Registration_.getText();
 
-        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+        // 2. Crear objeto Avion
+        Avion nuevoAvion = new Avion(id, marca, modelo, capacidadMaxima, aerolinea);
 
-        this.cmb_Plane_Flight_Registration_.addItem(id);
+        // 3. Obtener controlador (similar al de pasajeros)
+        AvionController controller = AvionController.getInstance(
+            new ServicioAviones(BaseDatosSimulada.getInstance())
+        );
+
+        // 4. Registrar avión
+        Response<Avion> response = controller.registrarAvion(nuevoAvion);
+
+        // 5. Manejar respuesta
+        if (response.getCodigo() == 201) { 
+            JOptionPane.showMessageDialog(this, "Avión registrado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCamposAvion();
+            //cmb_Plane_Flight_Registration_.addItem(id); // Actualizar combobox
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La capacidad máxima debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_Airplane_Registration_ActionPerformed
 
+    private void limpiarCamposAvion() {
+    txt_ID_Airplane_Registration_.setText("");
+    txt_Brand_Airplane_Registration_.setText("");
+    txt_Model_Airplane_Registration_.setText("");
+    txt_Max_Capacity_Airplane_Registration_.setText("");
+    txt_Airline_Airplane_Registration_.setText("");
+}
+    
     private void btn_Location_Registration_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Location_Registration_ActionPerformed
         // TODO add your handling code here:
         String id = txt_Airport_ID_Location_Registration_.getText();
@@ -1579,7 +1610,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String apellido = txt_Last_Name_Update_.getText();
         LocalDate fechaNacimiento = LocalDate.of(
             Integer.parseInt(txt_Birthdate_Update_.getText()),
-            MONTH5.getSelectedIndex() - 1,
+            MONTH5.getSelectedIndex() + 1,
             Integer.parseInt(DAY5.getItemAt(DAY5.getSelectedIndex()))
         );
         int codigoPais = Integer.parseInt(txt_Codigo_de_Pais_Update_.getText());
@@ -1735,12 +1766,12 @@ public class AirportFrame extends javax.swing.JFrame {
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, 
-            "Error crítico: " + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-    }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error crítico: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_Refresh_Passengers_List_ActionPerformed
 
     private void btn_Refresh_All_Flights_List_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Refresh_All_Flights_List_ActionPerformed
@@ -1754,10 +1785,47 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btn_Refresh_Planes_List_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Refresh_Planes_List_ActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tbl_Lista_Aviones_Show_all_Planes_.getModel();
+        /*DefaultTableModel model = (DefaultTableModel) tbl_Lista_Aviones_Show_all_Planes_.getModel();
         model.setRowCount(0);
         for (Plane plane : this.planes) {
             model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
+        }*/
+        try {
+        // 1. Obtener instancia del controlador (igual que con pasajeros)
+        AvionController controller = AvionController.getInstance(
+            new ServicioAviones(BaseDatosSimulada.getInstance())
+        );
+        
+        // 2. Obtener la lista de aviones ordenados
+        Response<ArrayList<Avion>> response = controller.obtenerAvionesOrdenados();
+        
+        // 3. Verificar respuesta exitosa
+        if (response.getCodigo() == 200) {
+            DefaultTableModel model = (DefaultTableModel) tbl_Lista_Aviones_Show_all_Planes_.getModel();
+            model.setRowCount(0); // Limpiar tabla
+            
+            // 4. Llenar la tabla con los datos
+            for (Avion avion : response.getDatos()) {
+                model.addRow(new Object[]{
+                    avion.getId(),
+                    avion.getMarca(),
+                    avion.getModelo(),
+                    avion.getCapacidadMaxima(),
+                    avion.getAerolinea(),
+                    avion.getVuelos().size() // Número de vuelos
+                });
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar aviones: " + response.getMensaje(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error crítico: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_Refresh_Planes_List_ActionPerformed
 
@@ -1875,11 +1943,6 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lbl_Airline_Airplane_Registration_;
     private javax.swing.JLabel lbl_Airport_City_Local_Registration_;
     private javax.swing.JLabel lbl_Airport_Country_Location_Rgistration_;
@@ -1923,6 +1986,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JTable tbl_Lista_Vuelos_Show_my_Flights_;
     private javax.swing.JTable tbl_Passengers_List_Show_all_Passemgers_;
     private javax.swing.JTable tbl_Ubicaciones_Show_all_Locations_;
+    private javax.swing.JTextField txt_Airline_Airplane_Registration_;
     private javax.swing.JTextField txt_Airport_City_Location_Registration_;
     private javax.swing.JTextField txt_Airport_Country_Location_Registration_;
     private javax.swing.JTextField txt_Airport_ID_Location_Registration_;
@@ -1932,17 +1996,21 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txt_Año_Departure_Date_Flight_Registration_;
     private javax.swing.JTextField txt_Birthdate_Passenger_Registration_;
     private javax.swing.JTextField txt_Birthdate_Update_;
+    private javax.swing.JTextField txt_Brand_Airplane_Registration_;
     private javax.swing.JTextField txt_Codigo_de_Pais_Update_;
     private javax.swing.JTextField txt_Country_Passenger_Registration_;
     private javax.swing.JTextField txt_Country_Update_;
     private javax.swing.JTextField txt_First_Name_Update_;
     private javax.swing.JTextField txt_First_Name__Passenger_Registration_;
     private javax.swing.JTextField txt_ID_Add_to_Flight_;
+    private javax.swing.JTextField txt_ID_Airplane_Registration_;
     private javax.swing.JTextField txt_ID_Flight_Registration_;
     private javax.swing.JTextField txt_ID_Passenger_Registration_;
     private javax.swing.JTextField txt_ID_Update_;
     private javax.swing.JTextField txt_Last_Name_Passenger_Registartion_;
     private javax.swing.JTextField txt_Last_Name_Update_;
+    private javax.swing.JTextField txt_Max_Capacity_Airplane_Registration_;
+    private javax.swing.JTextField txt_Model_Airplane_Registration_;
     private javax.swing.JTextField txt_Numero_de_Telefono_Update_;
     private javax.swing.JTextField txt_Phone_Code_Passenger_Registration_;
     private javax.swing.JTextField txt_Phone_Passenger_Registration_;

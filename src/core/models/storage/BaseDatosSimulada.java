@@ -23,7 +23,7 @@ import org.json.JSONObject;
  */
 public class BaseDatosSimulada {
     private Map<String, Ubicacion> ubicaciones = new HashMap<>();
-    private Map<String, Avion> aviones = new HashMap<>();
+    private Map<Long, Avion> aviones = new HashMap<>();
     private Map<Long, Pasajero> pasajeros = new HashMap<>();
     private Map<String, Vuelo> vuelos = new HashMap<>();
     private static BaseDatosSimulada instancia;
@@ -61,7 +61,7 @@ public class BaseDatosSimulada {
         for (int i = 0; i < arrAviones.length(); i++) {
             JSONObject obj = arrAviones.getJSONObject(i);
             Avion a = new Avion(
-                    obj.getString("id"),
+                    obj.getLong("id"),
                     obj.getString("marca"),
                     obj.getString("modelo"),
                     obj.getInt("capacidadMaxima"),
@@ -123,7 +123,7 @@ public class BaseDatosSimulada {
             avion.agregarVuelo(vuelo);
         }
     }
-    public Map<String, Avion> getMapaAviones() {
+    public Map<Long, Avion> getMapaAviones() {
         return aviones;
     }
     public Map<String, Ubicacion> getMapaUbicaciones() {
@@ -147,7 +147,7 @@ public class BaseDatosSimulada {
     public void agregarAvion(Avion avion) {
         aviones.put(avion.getId(), avion);
     }
-    public Avion obtenerAvion(String id) {
+    public Avion obtenerAvion(long id) {
         return aviones.get(id);
     }
 

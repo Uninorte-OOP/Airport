@@ -25,13 +25,13 @@ public class ServicioAviones {
         this.baseDatos = baseDatos;
     }
 
-    public Avion obtenerAvion(String id) {
+    public Avion obtenerAvion(long id) {
         return baseDatos.obtenerAvion(id);
     }
     public void registrarAvion(Avion avion) {
         baseDatos.agregarAvion(avion);
     }
-    public boolean existeAvion(String id) {
+    public boolean existeAvion(long id) {
         return baseDatos.obtenerAvion(id) != null;
     }
 
@@ -56,7 +56,7 @@ public class ServicioAviones {
         return lista;
     }
 
-    public List<Vuelo> obtenerVuelosDeAvion(String idAvion) {
+    public List<Vuelo> obtenerVuelosDeAvion(Long idAvion) {
         Avion avion = obtenerAvion(idAvion);
         return (avion != null) ? avion.getVuelos() : new ArrayList<>();
     }

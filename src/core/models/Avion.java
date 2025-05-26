@@ -17,14 +17,14 @@ import org.json.JSONObject;
  * @author NICOLAS ARIAS
  */
 public class Avion implements Cloneable {
-    private final String id;
+    private final long id;
     private String marca;
     private String modelo;
     private int capacidadMaxima;
     private String aerolinea;
     private final ArrayList<Vuelo> vuelos;
 
-    public Avion(String id, String marca, String modelo, int capacidadMaxima, String aerolinea) {
+    public Avion(long id, String marca, String modelo, int capacidadMaxima, String aerolinea) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -33,7 +33,7 @@ public class Avion implements Cloneable {
         this.vuelos = new ArrayList<>();
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -76,7 +76,7 @@ public class Avion implements Cloneable {
     }
 
     public static Avion desdeJSON(JSONObject json, ServicioVuelos servicioVuelos) {
-        String id = json.getString("id");
+        long id = json.getLong("id");
         String marca = json.getString("marca");
         String modelo = json.getString("modelo");
         int capacidadMaxima = json.getInt("capacidadMaxima");
@@ -102,7 +102,7 @@ public class Avion implements Cloneable {
         if (this == o) return true;
         if (!(o instanceof Avion)) return false;
         Avion avion = (Avion) o;
-        return id.equals(avion.id);
+        return id == avion.id;
     }
 
     @Override
