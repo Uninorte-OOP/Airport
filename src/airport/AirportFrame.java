@@ -62,8 +62,6 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         jTextField6.setText("");
         jTextField7.setText("");
     }
-    
-    
 
     @Override
     public void updatePassengerLists(ArrayList<Passenger> passengers) {
@@ -72,12 +70,20 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         model.setRowCount(0);
         
         this.userSelect.removeAllItems();
+        this.userSelect.addItem("Passenger");
         for (Passenger passenger : passengers) {
             model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
             this.userSelect.addItem("" + passenger.getId());
         }
     }
+    
+    @Override
+    public void setPassengerIdInAddToFlight(String id) {
+        System.out.println("setPassengerIdInAddToFlight"+id);
+        jTextField28.setText(id != null ? id : "");
+    }
 
+    
     @Override
     public void updatePlaneLists(ArrayList<Plane> planes) {
         DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
@@ -1037,7 +1043,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(507, 507, 507)
                         .addComponent(jButton1)))
-                .addContainerGap(549, Short.MAX_VALUE))
+                .addContainerGap(625, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1080,6 +1086,11 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
         jTextField28.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jTextField28.setEnabled(false);
+        jTextField28.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField28ActionPerformed(evt);
+            }
+        });
 
         jLabel44.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel44.setText("ID:");
@@ -1111,7 +1122,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(822, Short.MAX_VALUE))
+                .addContainerGap(898, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1181,7 +1192,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(269, 269, 269)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(291, Short.MAX_VALUE))
+                .addContainerGap(367, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
@@ -1245,7 +1256,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1078, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1305,7 +1316,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(521, 521, 521)
                         .addComponent(jButton4)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1364,7 +1375,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(145, 145, 145)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(265, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1423,7 +1434,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(226, 226, 226)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addContainerGap(348, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1480,7 +1491,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
                             .addComponent(jLabel46))
                         .addGap(79, 79, 79)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox6, 0, 99, Short.MAX_VALUE)
+                            .addComponent(jComboBox6, 0, 175, Short.MAX_VALUE)
                             .addComponent(jComboBox7, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(820, 820, 820))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
@@ -1795,6 +1806,16 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
     private void userSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userSelectActionPerformed
         try {
             String id = userSelect.getSelectedItem().toString();
+            System.out.println(id);
+            this.observer.onSelectedPassengerId(id);
+        }
+        catch(Exception e) {
+            
+        }
+        /*
+        try {
+        
+            String id = userSelect.getSelectedItem().toString();
             if (! id.equals(userSelect.getItemAt(0))) {
                 jTextField20.setText(id);
                 jTextField28.setText(id);
@@ -1805,11 +1826,23 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
             }
         } catch (Exception e) {
         }
+        */
     }//GEN-LAST:event_userSelectActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField28ActionPerformed
+        /*jTabbedPane1.addChangeListener(e -> {
+            int selectedIndex = jTabbedPane1.getSelectedIndex();
+            String selectedTitle = jTabbedPane1.getTitleAt(selectedIndex);
+
+            if (selectedTitle.equals("Add to flight")) {
+                observer.onOpenAddToFlightView();
+            }
+        });   */  // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField28ActionPerformed
 
     /**
      * @param args the command line arguments

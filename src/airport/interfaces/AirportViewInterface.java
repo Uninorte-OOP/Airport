@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author alejandro
+ * @author miguel
  */
 public interface AirportViewInterface {
     public void setVisible(boolean b);
@@ -31,5 +31,7 @@ public interface AirportViewInterface {
     public void updatePlaneLists(ArrayList<Plane> Planes);
     public void updateLocationLists(ArrayList<Location> Locations);
     public void updateFlightLists(ArrayList<Flight> Fligts);
+
+    public void setPassengerIdInAddToFlight(String passengerId);
 
 }

@@ -8,7 +8,6 @@ import airport.Flight;
 import airport.Location;
 import airport.Passenger;
 import airport.Plane;
-import airport.controllers.AirportController;
 import airport.enums.AirportUser;
 import java.util.ArrayList;
 
@@ -34,11 +33,18 @@ public interface StorageInterface {
     public Plane getPlaneById(String planeId);
 
     public Location getLocationById(String departureLocationId);
+
+    public int getSelectedPassengerId() ;
+
+    public void setSelectedPassengerId(int passengerId);
+
+    public boolean isValidPasengerId(String passengerId);
     
     public interface Callback {
         void onSavedPassenger();
         void onSavedPlane();
         void onSavedLocation();
         void onSavedFlight();
+        void onSetPassengerId();
     }
 }

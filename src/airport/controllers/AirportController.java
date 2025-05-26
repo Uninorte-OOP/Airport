@@ -39,6 +39,7 @@ public class AirportController implements AirportControllerInterface, AirportVie
     public void startView() {
         this.view.setVisible(true);
     }
+
     
     @Override
     public void onSelectedPassengerType() {
@@ -163,4 +164,24 @@ public class AirportController implements AirportControllerInterface, AirportVie
         this.view.updateFlightLists(this.storage.getFlights());
     }
     
+    @Override
+    public void onOpenAddToFlightView() {
+        String passengerId = String.valueOf(storage.getSelectedPassengerId());
+        this.view.setPassengerIdInAddToFlight(passengerId);
+    }
+
+    @Override
+    public void onSelectedPassengerId(String passengerId) {        
+        boolean validPassenger = this.storage.isValidPasengerId(passengerId);
+        if(!validPassenger) {
+            return;
+        }
+        
+        this.storage.setSelectedPassengerId(Integer.parseInt(passengerId));
+    }
+
+    @Override
+    public void onSetPassengerId() {
+        this.view.setPassengerIdInAddToFlight(String.valueOf(this.storage.getSelectedPassengerId()));
+    }
 }

@@ -26,6 +26,7 @@ public class StorageFactory {
 
 class StorageFactoryImpl implements StorageInterface {
     private ArrayList<Passenger> passengers;
+    private Map<String,Passenger> passengersMap;
     private ArrayList<Plane> planes;
     private Map<String, Plane> planesMap;
     private ArrayList<Location> locations;
@@ -33,6 +34,7 @@ class StorageFactoryImpl implements StorageInterface {
     private ArrayList<Flight> flights;
     private Callback callback;
     private AirportUser userType;
+    private int selectedPassengerId;
     
     
     StorageFactoryImpl() {
@@ -40,6 +42,7 @@ class StorageFactoryImpl implements StorageInterface {
         this.planes = new ArrayList<Plane>();
         this.locations = new ArrayList<Location>();
         this.flights = new ArrayList<Flight>();
+        this.passengersMap = new HashMap();
         this.planesMap = new HashMap();
         this.locationsMap = new HashMap();
     }
@@ -63,6 +66,7 @@ class StorageFactoryImpl implements StorageInterface {
     @Override
     public void savePassenger(Passenger passenger) {
         this.passengers.add(passenger);
+        this.passengersMap.put(String.valueOf(passenger.getId()), passenger);
         this.callback.onSavedPassenger();
     }
 
@@ -115,6 +119,22 @@ class StorageFactoryImpl implements StorageInterface {
     @Override
     public Location getLocationById(String locationId) {
         return this.locationsMap.get(locationId);
+    }
+
+    @Override
+    public int getSelectedPassengerId() {
+        return this.selectedPassengerId;
+    }
+
+    @Override
+    public void setSelectedPassengerId(int passengerId) {
+        this.selectedPassengerId = passengerId;
+        this.callback.onSetPassengerId();
+    }
+
+    @Override
+    public boolean isValidPasengerId(String passengerId) {
+        return passengersMap.containsKey(passengerId);
     }
 
     

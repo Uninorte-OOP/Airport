@@ -11,15 +11,19 @@ import airport.pojo.PassengerForm;
 
 /**
  *
- * @author alejandro
+ * @author miguel
  */
 public interface AirportViewObserver {
     void onSelectedPassengerType();
     void onSelectedAdministratorType();
     void onRegisterPassengerIntent(PassengerForm form);
-    void onRegisterAirplaneIntent(AirplaneForm form);
+    void onRegisterAirplaneIntent(AirplaneForm form);;
 
     public void onRegisterLocationIntent(LocationForm form);
 
     public void onRegisterFlightIntent(FlightForm form);
+
+    public void onOpenAddToFlightView();
+
+    public void onSelectedPassengerId(String selectedId);
 }
