@@ -35,5 +35,6 @@ public interface AirportViewInterface {
     public void setPassengerIdInAddToFlight(String passengerId);
 
     public void updateMyFlightsList(ArrayList<Flight> flights);
+    void showError(String message);
 
 }
