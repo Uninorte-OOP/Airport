@@ -132,15 +132,15 @@ public class Flight {
     }
 
     public String getDepartureLocationId() {
-        return departureLocation.getId();
+        return departureLocation.getAirportId();
     }
 
     public String getArrivalLocationId() {
-        return arrivalLocation.getId();
+        return arrivalLocation.getAirportId();
     }
 
     public String getScaleLocationId() {
-        return scaleLocation != null ? scaleLocation.getId() : null;
+        return scaleLocation != null ? scaleLocation.getAirportId() : null;
     }
     
     public int getYear() {
@@ -179,22 +179,19 @@ public class Flight {
         return minutesDurationScale;
     }
 
-    Object calculateArrivalDate() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public LocalDateTime calculateArrivalDate() {
+        return departureDate.plusHours(hoursDurationScale).plusHours(hoursDurationArrival).plusMinutes(minutesDurationScale).plusMinutes(minutesDurationArrival);
     }
-
-    Object getNumPassengers() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    void addPassenger(Passenger passenger) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    void delay(int hours, int minutes) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-
     
+    public void delay(int hours, int minutes) {
+        this.departureDate = this.departureDate.plusHours(hours).plusMinutes(minutes);
+    }
+    
+    public int getNumPassengers() {
+        return passengers.size();
+    }
+
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
+    }
 }

@@ -15,7 +15,6 @@ public class Location {
     private String airportCountry;
     private double airportLatitude;
     private double airportLongitude;
-    private String id;
 
     public Location(String airportId, String airportName, String airportCity, String airportCountry, double airportLatitude, double airportLongitude) {
         this.airportId = airportId;
@@ -69,9 +68,5 @@ public class Location {
     public void setAirportLongitude(double airportLongitude) {
         this.airportLongitude = airportLongitude;
     }
-
-   public String getId() {
-    return id;
-}
 
 }

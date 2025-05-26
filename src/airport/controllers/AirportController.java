@@ -38,6 +38,10 @@ public class AirportController implements AirportControllerInterface, AirportVie
     @Override
     public void startView() {
         this.view.setVisible(true);
+        this.view.updatePassengerLists(this.storage.getPassengers());
+        this.view.updatePlaneLists(this.storage.getPlanes());
+        this.view.updateLocationLists(this.storage.getLocations());
+        this.view.updateFlightLists(this.storage.getFlights());
     }
 
     
@@ -184,4 +188,43 @@ public class AirportController implements AirportControllerInterface, AirportVie
     public void onSetPassengerId() {
         this.view.setPassengerIdInAddToFlight(String.valueOf(this.storage.getSelectedPassengerId()));
     }
+
+    @Override
+    public void onAddToFlightIntent(String flightId) {
+        int selectedPassengerId = this.storage.getSelectedPassengerId();
+        boolean validFlight = this.storage.isValidFlightId(flightId);
+        
+        if(!validFlight) {
+            return;
+        }
+        
+        Passenger passenger = this.storage.getPassengerById(selectedPassengerId);
+        Flight flight = this.storage.getFlightById(flightId);
+        passenger.addFlight(flight);
+        
+        this.storage.updatePassenger(passenger);
+        this.view.updateMyFlightsList(passenger.getFlights());
+    }
+
+    @Override
+    public void onRefreshLocatinosList() {
+        this.view.updateLocationLists(this.storage.getLocations());
+    }
+
+    @Override
+    public void onRefreshPlanesList() {
+        this.view.updatePlaneLists(this.storage.getPlanes());
+    }
+
+    @Override
+    public void onRefreshFlightsList() {
+        this.view.updateFlightLists(this.storage.getFlights());
+    }
+
+    @Override
+    public void onRefreshMyFlightsList() {
+        this.view.updateMyFlightsList(this.storage.getPassengerById(this.storage.getSelectedPassengerId()).getFlights());
+    }
+    
+    
 }

@@ -28,19 +28,11 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
      * Creates new form AirportFrame
      */
     private int x, y;
-    private ArrayList<Passenger> passengers;
-    private ArrayList<Plane> planes;
-    private ArrayList<Location> locations;
-    private ArrayList<Flight> flights;
+    
     private AirportViewObserver observer;
 
     public AirportFrame() {
         initComponents();
-
-        this.passengers = new ArrayList<>();
-        this.planes = new ArrayList<>();
-        this.locations = new ArrayList<>();
-        this.flights = new ArrayList<>();
 
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
@@ -50,6 +42,16 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
+    }
+
+    @Override
+    public void updateMyFlightsList(ArrayList<Flight> flights) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        for (Flight flight : flights) {
+            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
+        }
     }
 
     @Override
@@ -120,14 +122,14 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
     }
     
     @Override
-    public void updateFlightLists(ArrayList<Flight> fligths) {
+    public void updateFlightLists(ArrayList<Flight> flights) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         model.setRowCount(0);
         this.jComboBox5.removeAllItems();
-        for (Flight flight : fligths) {
-            model.addRow(new Object[]{
-                flight.getId(), flight.getPlaneId(), flight.getDepartureLocationId(), flight.getArrivalLocationId(), flight.getScaleLocationId(), flight.getYear(), flight.getMonth(), flight.getDay(), flight.getHour(), flight.getMinutes(), flight.getHoursDurationsArrival(), flight.getMinutesDurationsArrival(), flight.getHoursDurationsScale(),flight.getMinutesDurationsScale()});
-
+        
+        for (Flight flight : flights) {
+            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
+        
             this.jComboBox5.addItem(flight.getId());
         }
     }
@@ -1682,6 +1684,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        /*
         long id = Long.parseLong(jTextField20.getText());
         String firstname = jTextField22.getText();
         String lastname = jTextField23.getText();
@@ -1707,13 +1710,20 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         passenger.setCountryPhoneCode(phoneCode);
         passenger.setPhone(phone);
         passenger.setCountry(country);
+        
+        */
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
-        long passengerId = Long.parseLong(jTextField28.getText());
+        
+        
+        //long passengerId = Long.parseLong(jTextField28.getText());
         String flightId = jComboBox5.getItemAt(jComboBox5.getSelectedIndex());
+        this.observer.onAddToFlightIntent(flightId);
 
+        
+        /*
         Passenger passenger = null;
         Flight flight = null;
 
@@ -1731,10 +1741,13 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
         passenger.addFlight(flight);
         flight.addPassenger(passenger);
+        
+        */
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        /*// TODO add your handling code here:
+        
         String flightId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
         int hours = Integer.parseInt(jComboBox6.getItemAt(jComboBox6.getSelectedIndex()));
         int minutes = Integer.parseInt(jComboBox8.getItemAt(jComboBox8.getSelectedIndex()));
@@ -1747,10 +1760,13 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         }
 
         flight.delay(hours, minutes);
+        */
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        this.observer.onRefreshMyFlightsList();
+        /*
         long passengerId = Long.parseLong(userSelect.getItemAt(userSelect.getSelectedIndex()));
 
         Passenger passenger = null;
@@ -1766,6 +1782,7 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
         for (Flight flight : flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
         }
+        */
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1774,29 +1791,40 @@ public class AirportFrame extends javax.swing.JFrame implements AirportViewInter
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        
+        this.observer.onRefreshFlightsList();
+        /*
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         model.setRowCount(0);
         for (Flight flight : this.flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
         }
+        */
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        
+        this.observer.onRefreshPlanesList();
+        /*
         DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
         model.setRowCount(0);
         for (Plane plane : this.planes) {
             model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
         }
+        */
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        this.observer.onRefreshLocatinosList();
+        /*
         DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
         model.setRowCount(0);
         for (Location location : this.locations) {
             model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
         }
+        */
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed

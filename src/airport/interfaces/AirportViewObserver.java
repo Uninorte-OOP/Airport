@@ -26,4 +26,14 @@ public interface AirportViewObserver {
     public void onOpenAddToFlightView();
 
     public void onSelectedPassengerId(String selectedId);
+
+    public void onAddToFlightIntent(String flightId);
+
+    public void onRefreshLocatinosList();
+
+    public void onRefreshPlanesList();
+
+    public void onRefreshFlightsList();
+
+    public void onRefreshMyFlightsList();
 }

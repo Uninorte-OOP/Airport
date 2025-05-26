@@ -12,6 +12,7 @@ import airport.drivers.StorageInterface;
 import airport.enums.AirportUser;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +33,7 @@ class StorageFactoryImpl implements StorageInterface {
     private ArrayList<Location> locations;
     private Map<String, Location> locationsMap;
     private ArrayList<Flight> flights;
+    private Map<String,Flight> flightsMap;
     private Callback callback;
     private AirportUser userType;
     private int selectedPassengerId;
@@ -48,10 +50,23 @@ class StorageFactoryImpl implements StorageInterface {
     }
 
     @Override
+    public void updatePassenger(Passenger passenger) {
+        this.passengersMap.put(String.valueOf(passenger.getId()),passenger);
+        this.passengers = new ArrayList(this.passengersMap.values());
+    }
+    
+    @Override
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
 
+    @Override
+    public Flight getFlightById(String flightId) {
+        return this.flightsMap.get(flightId);
+    }
+
+    
+    
     @Override
     public void setUserType(AirportUser airportUser) {
         this.userType = airportUser;
@@ -136,6 +151,66 @@ class StorageFactoryImpl implements StorageInterface {
     public boolean isValidPasengerId(String passengerId) {
         return passengersMap.containsKey(passengerId);
     }
+    
+    @Override
+    public boolean isValidFlightId(String flightId) {
+        return flightsMap.containsKey(flightId);
+    }
 
+    @Override
+    public void setPassengers(List<Passenger> defaultPassengers) {
+        this.passengers = new ArrayList(defaultPassengers);
+        for(int i = 0;i<defaultPassengers.size();i++) {
+            Passenger passenger = defaultPassengers.get(i);
+            this.passengersMap.put(String.valueOf(passenger.getId()), passenger);
+        }
+    }
+
+    @Override
+    public Passenger getPassengerById(int selectedPassengerId) {
+        return this.passengersMap.get(String.valueOf(selectedPassengerId));
+    }
+
+    @Override
+    public void setPlanes(List<Plane> defaultPlanes) {
+        this.planes = new ArrayList(defaultPlanes);
+        for(int i = 0;i<defaultPlanes.size();i++) {
+            Plane plane = defaultPlanes.get(i);
+            this.planesMap.put(plane.getId(), plane);
+        }
+    }
+
+    @Override
+    public void setLocations(List<Location> defaultLocations) {
+        this.locations = new ArrayList(defaultLocations);
+        for(int i = 0;i<defaultLocations.size();i++) {
+            Location location = defaultLocations.get(i);
+            this.locationsMap.put(location.getAirportId(), location);
+        }
+    }
+
+    @Override
+    public void setFlights(List<Flight> defaultFlights) {
+        ArrayList<Flight> fixedFlights = new ArrayList();
+        for(int i = 0;i<defaultFlights.size();i++) {
+            Flight flight = defaultFlights.get(i);
+            
+            String planeId = flight.getPlaneId();
+            Plane plane = this.planesMap.get(planeId);
+            flight.setPlane(plane);
+            
+            Location location1 = locationsMap.get(flight.getDepartureLocation().getAirportId());
+            flight.setDepartureLocation(location1);
+            
+            Location location2 = locationsMap.get(flight.getArrivalLocation().getAirportId());
+            flight.setArrivalLocation(location2);
+            
+            fixedFlights.add(flight);
+        }
+        
+        this.flights = fixedFlights;
+    }
+
+    
     
 }
